@@ -14,6 +14,10 @@ pub enum Error {
     CeremonyRefused,
     #[error("native carriage frame refused")]
     NativeFrameRefused,
+    #[error("rendezvous continuity evidence refused")]
+    RendezvousRefused,
+    #[error("rendezvous unavailable for {identity}: {knowledge}")]
+    RendezvousUnavailable { identity: String, knowledge: String },
     #[error("I/O failure: {0}")]
     Io(#[from] io::Error),
     #[error("JSON failure: {0}")]

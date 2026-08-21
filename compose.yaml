@@ -27,6 +27,8 @@ services:
       - ./fixtures:/fixtures:ro
   native-interop:
     build:
-      context: ..
-      dockerfile: PorterNet/Interop.Dockerfile
+      context: .
+      dockerfile: Interop.Dockerfile
+      additional_contexts:
+        porter_reference: ${PORTER_REFERENCE_CONTEXT:-https://github.com/roastrofficial-ctrl/What-if-Porter.git#7e8dc1790e9c0dad7153a2f87cd10a2780b452aa}
     network_mode: none

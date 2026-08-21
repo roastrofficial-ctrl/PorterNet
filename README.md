@@ -24,4 +24,12 @@ attention. Its output is application-owned observation, not PORTER disposition.
 
 `native-interop` independently exercises protected carriage in both directions:
 Python opens a Rust `PACKAGE` frame and Rust opens a Python `CEREMONY_RESULT`
-frame. The service has no network while the fixture runs.
+frame. The reference source is an explicit pinned external build context, never
+a sibling runtime dependency. To test a local reference checkout instead, use:
+
+```sh
+PORTER_REFERENCE_CONTEXT=/absolute/path/to/python-porter \
+  docker compose run --rm --build native-interop
+```
+
+The service has no network while the fixture runs.
