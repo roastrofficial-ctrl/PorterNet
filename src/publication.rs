@@ -5,7 +5,7 @@ use std::path::Path;
 use serde::Serialize;
 use uuid::Uuid;
 
-use crate::{canonical, Result};
+use crate::{Result, canonical};
 
 pub fn atomic_json<T: Serialize>(path: &Path, value: &T) -> Result<()> {
     let parent = path
@@ -14,11 +14,16 @@ pub fn atomic_json<T: Serialize>(path: &Path, value: &T) -> Result<()> {
     fs::create_dir_all(parent)?;
     let temporary = parent.join(format!(
         ".{}.{}.tmp",
-        path.file_name().and_then(|name| name.to_str()).unwrap_or("fact"),
+        path.file_name()
+            .and_then(|name| name.to_str())
+            .unwrap_or("fact"),
         Uuid::new_v4().simple()
     ));
     let result = (|| {
-        let mut stream = OpenOptions::new().write(true).create_new(true).open(&temporary)?;
+        let mut stream = OpenOptions::new()
+            .write(true)
+            .create_new(true)
+            .open(&temporary)?;
         stream.write_all(&canonical::bytes(value)?)?;
         stream.write_all(b"\n")?;
         stream.sync_all()?;

@@ -23,7 +23,13 @@ pub struct PorterStore {
 impl PorterStore {
     pub fn new(root: impl Into<PathBuf>) -> Result<Self> {
         let store = Self { root: root.into() };
-        for directory in ["lodgements", "acceptances", "collections", "inbox", "collected"] {
+        for directory in [
+            "lodgements",
+            "acceptances",
+            "collections",
+            "inbox",
+            "collected",
+        ] {
             fs::create_dir_all(store.root.join(directory))?;
         }
         Ok(store)
@@ -33,10 +39,29 @@ impl PorterStore {
         &self.root
     }
 
+    pub fn replay_acceptance(&self, package: &Package) -> Result<Option<Acceptance>> {
+        validate_package(package)?;
+        let path = self
+            .root
+            .join("acceptances")
+            .join(format!("{}.json", package.package));
+        if !path.exists() {
+            return Ok(None);
+        }
+        let existing: Acceptance = serde_json::from_slice(&fs::read(path)?)?;
+        if existing.package_digest != canonical::digest(package)? {
+            return Err(Error::IdentityCollision(package.package.clone()));
+        }
+        Ok(Some(existing))
+    }
+
     pub fn lodge(&self, package: &Package, at_ms: i64, crash: CrashPoint) -> Result<Lodgement> {
         validate_package(package)?;
         let digest = canonical::digest(package)?;
-        let path = self.root.join("lodgements").join(format!("{}.json", package.package));
+        let path = self
+            .root
+            .join("lodgements")
+            .join(format!("{}.json", package.package));
         if path.exists() {
             let existing: Lodgement = serde_json::from_slice(&fs::read(path)?)?;
             if existing.package_digest != digest {
@@ -59,16 +84,14 @@ impl PorterStore {
     }
 
     pub fn accept(&self, package: &Package, at_ms: i64, crash: CrashPoint) -> Result<Acceptance> {
-        validate_package(package)?;
-        let digest = canonical::digest(package)?;
-        let path = self.root.join("acceptances").join(format!("{}.json", package.package));
-        if path.exists() {
-            let existing: Acceptance = serde_json::from_slice(&fs::read(path)?)?;
-            if existing.package_digest != digest {
-                return Err(Error::IdentityCollision(package.package.clone()));
-            }
+        if let Some(existing) = self.replay_acceptance(package)? {
             return Ok(existing);
         }
+        let digest = canonical::digest(package)?;
+        let path = self
+            .root
+            .join("acceptances")
+            .join(format!("{}.json", package.package));
         let value = Acceptance {
             protocol: "PORTER/1".into(),
             kind: "REMOTE_ACCEPTANCE".into(),
@@ -81,16 +104,34 @@ impl PorterStore {
         };
         atomic_json(&path, &value)?;
         interrupted(crash == CrashPoint::AfterAcceptance, "AC")?;
-        atomic_json(&self.root.join("inbox").join(format!("{}.json", package.package)), package)?;
+        atomic_json(
+            &self
+                .root
+                .join("inbox")
+                .join(format!("{}.json", package.package)),
+            package,
+        )?;
         Ok(value)
     }
 
-    pub fn collect(&self, package_id: &str, collector: &str, at_ms: i64, crash: CrashPoint) -> Result<Collection> {
-        let association = self.root.join("collections").join(format!("{package_id}.json"));
+    pub fn collect(
+        &self,
+        package_id: &str,
+        collector: &str,
+        at_ms: i64,
+        crash: CrashPoint,
+    ) -> Result<Collection> {
+        let association = self
+            .root
+            .join("collections")
+            .join(format!("{package_id}.json"));
         if association.exists() {
             return Ok(serde_json::from_slice(&fs::read(association)?)?);
         }
-        let acceptance_path = self.root.join("acceptances").join(format!("{package_id}.json"));
+        let acceptance_path = self
+            .root
+            .join("acceptances")
+            .join(format!("{package_id}.json"));
         if !acceptance_path.exists() {
             return Err(Error::MissingFact(format!("AC for {package_id}")));
         }
@@ -107,7 +148,13 @@ impl PorterStore {
         };
         atomic_json(&association, &value)?;
         interrupted(crash == CrashPoint::AfterCollection, "CL")?;
-        atomic_json(&self.root.join("collected").join(format!("{package_id}.json")), &value.package)?;
+        atomic_json(
+            &self
+                .root
+                .join("collected")
+                .join(format!("{package_id}.json")),
+            &value.package,
+        )?;
         let _ = fs::remove_file(self.root.join("inbox").join(format!("{package_id}.json")));
         Ok(value)
     }
@@ -128,7 +175,11 @@ fn identity(prefix: &str) -> String {
 }
 
 fn interrupted(condition: bool, threshold: &'static str) -> Result<()> {
-    if condition { Err(Error::Interrupted(threshold)) } else { Ok(()) }
+    if condition {
+        Err(Error::Interrupted(threshold))
+    } else {
+        Ok(())
+    }
 }
 
 #[cfg(test)]
@@ -139,24 +190,56 @@ mod tests {
     use super::*;
 
     fn package() -> Package {
-        Package { protocol:"PORTER/1".into(), package:"PKG-00000000000000000000000000000001".into(), sender:"a".into(), recipient:"b".into(), kind:"opaque.demo".into(), created:1, expires:2, payload:json!({"meaning":"belongs elsewhere"}), in_reply_to:None }
+        Package {
+            protocol: "PORTER/1".into(),
+            package: "PKG-00000000000000000000000000000001".into(),
+            sender: "a".into(),
+            recipient: "b".into(),
+            kind: "opaque.demo".into(),
+            created: 1,
+            expires: 2,
+            payload: json!({"meaning":"belongs elsewhere"}),
+            in_reply_to: None,
+        }
     }
 
     #[test]
     fn thresholds_survive_projection_interruption_and_exact_replay() {
-        let temporary=TempDir::new().unwrap();let store=PorterStore::new(temporary.path()).unwrap();let package=package();
-        assert!(matches!(store.lodge(&package,1,CrashPoint::AfterLodgement),Err(Error::Interrupted("LG"))));
-        let lg=store.lodge(&package,2,CrashPoint::None).unwrap();assert_eq!(lg.lodged_at_ms,1);
-        assert!(matches!(store.accept(&package,3,CrashPoint::AfterAcceptance),Err(Error::Interrupted("AC"))));
-        let ac=store.accept(&package,4,CrashPoint::None).unwrap();assert_eq!(ac.accepted_at_ms,3);
-        assert!(matches!(store.collect(&package.package,"host",5,CrashPoint::AfterCollection),Err(Error::Interrupted("CL"))));
-        let cl=store.collect(&package.package,"host",6,CrashPoint::None).unwrap();assert_eq!(cl.collected_at_ms,5);
+        let temporary = TempDir::new().unwrap();
+        let store = PorterStore::new(temporary.path()).unwrap();
+        let package = package();
+        assert!(matches!(
+            store.lodge(&package, 1, CrashPoint::AfterLodgement),
+            Err(Error::Interrupted("LG"))
+        ));
+        let lg = store.lodge(&package, 2, CrashPoint::None).unwrap();
+        assert_eq!(lg.lodged_at_ms, 1);
+        assert!(matches!(
+            store.accept(&package, 3, CrashPoint::AfterAcceptance),
+            Err(Error::Interrupted("AC"))
+        ));
+        let ac = store.accept(&package, 4, CrashPoint::None).unwrap();
+        assert_eq!(ac.accepted_at_ms, 3);
+        assert!(matches!(
+            store.collect(&package.package, "host", 5, CrashPoint::AfterCollection),
+            Err(Error::Interrupted("CL"))
+        ));
+        let cl = store
+            .collect(&package.package, "host", 6, CrashPoint::None)
+            .unwrap();
+        assert_eq!(cl.collected_at_ms, 5);
     }
 
     #[test]
     fn changed_bytes_under_one_identity_are_hostile() {
-        let temporary=TempDir::new().unwrap();let store=PorterStore::new(temporary.path()).unwrap();let mut value=package();
-        store.accept(&value,1,CrashPoint::None).unwrap();value.payload=json!({"changed":true});
-        assert!(matches!(store.accept(&value,2,CrashPoint::None),Err(Error::IdentityCollision(_))));
+        let temporary = TempDir::new().unwrap();
+        let store = PorterStore::new(temporary.path()).unwrap();
+        let mut value = package();
+        store.accept(&value, 1, CrashPoint::None).unwrap();
+        value.payload = json!({"changed":true});
+        assert!(matches!(
+            store.accept(&value, 2, CrashPoint::None),
+            Err(Error::IdentityCollision(_))
+        ));
     }
 }

@@ -44,3 +44,15 @@ Status: live Generation Zero register. Entries are recorded before resolution.
   normative, but exact HKDF info/salt, nonce placement, key ordering and envelope
   JSON bytes must be extracted from compatibility evidence.
 - Status: open and blocking native cross-implementation carriage.
+
+## D-005 — Introduction and standing fact schemas are not fully bound
+
+- Classification: specification ambiguity.
+- Rust first observation: admission ordering, standing history and custody
+  continuity are explicit, but complete language-neutral IN/SC field names,
+  protocol tags, integer domains and canonical secret-file binding are not.
+- PorterNet provisional behavior: minimal immutable `Introduction`, `Terms` and
+  predecessor-keyed `StandingChange` records implement the stated semantics;
+  their serialized representation is not yet claimed interoperable.
+- Status: open; compare language-neutral fixtures before promoting these Rust
+  records or Python records into the PORTER/1 binding.

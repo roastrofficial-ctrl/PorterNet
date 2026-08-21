@@ -1,0 +1,27 @@
+services:
+  checks:
+    build:
+      context: .
+      target: checks
+    network_mode: none
+  rust-host:
+    build:
+      context: .
+      target: host
+    network_mode: none
+    read_only: true
+    tmpfs: [/tmp]
+    volumes:
+      - ./demo:/exchange
+      - ./fixtures:/fixtures:ro
+  shell-host:
+    build:
+      context: .
+      target: host
+    entrypoint: ["/bin/sh", "/usr/local/bin/shell-host"]
+    network_mode: none
+    read_only: true
+    tmpfs: [/tmp]
+    volumes:
+      - ./demo:/exchange
+      - ./fixtures:/fixtures:ro

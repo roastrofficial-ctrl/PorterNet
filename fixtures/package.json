@@ -1,0 +1,10 @@
+{
+  "protocol": "PORTER/1",
+  "package": "PKG-00000000000000000000000000000001",
+  "from": "fixture-sender",
+  "to": "fixture-recipient",
+  "kind": "opaque.demo",
+  "created": 1,
+  "expires": 4102444800000,
+  "payload": { "meaning": "belongs to the Host" }
+}
