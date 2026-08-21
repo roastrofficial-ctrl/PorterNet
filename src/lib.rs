@@ -9,6 +9,7 @@ pub mod native;
 pub mod publication;
 pub mod rendezvous;
 pub mod standing;
+pub mod unit_spool;
 
 pub use ceremony::{
     CeremonialGrant, Ceremony, CeremonyCrashPoint, CeremonyEvidence, CeremonyResult,
@@ -23,3 +24,6 @@ pub use rendezvous::{
     RendezvousTransition, TransitionDraft,
 };
 pub use standing::{Admission, Introduction, StandingChange, StandingStore, Terms};
+pub use unit_spool::{
+    EvidenceExpectation, EvidenceRetention, NativeUnit, TransportObservation, UnitSpool,
+};
