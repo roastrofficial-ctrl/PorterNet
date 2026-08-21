@@ -42,6 +42,8 @@ pub struct StandingChange {
     pub change: String,
     pub predecessor: String,
     pub successor: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub cause: Option<String>,
     pub changed_at_ms: i64,
 }
 
@@ -59,7 +61,12 @@ pub struct StandingStore {
 impl StandingStore {
     pub fn new(root: impl Into<PathBuf>) -> Result<Self> {
         let root = root.into();
-        for directory in ["introductions", "standing_changes", "standing_secrets"] {
+        for directory in [
+            "introductions",
+            "standing_changes",
+            "standing_secrets",
+            "standing_roots",
+        ] {
             fs::create_dir_all(root.join(directory))?;
         }
         Ok(Self {
@@ -77,9 +84,21 @@ impl StandingStore {
             if fs::read(&secret)? != capability {
                 return Err(Error::IdentityCollision(introduction.introduction.clone()));
             }
-            return Ok(());
+        } else {
+            publish_secret(&secret, capability)?;
         }
-        publish_secret(&secret, capability)
+        let root = self.relationship_root_path(&introduction.sender, &introduction.recipient)?;
+        if !root.exists() {
+            atomic_json(
+                &root,
+                &RelationshipRoot {
+                    sender: introduction.sender.clone(),
+                    recipient: introduction.recipient.clone(),
+                    first: introduction.introduction.clone(),
+                },
+            )?;
+        }
+        Ok(())
     }
 
     pub fn change(&self, change: &StandingChange) -> Result<()> {
@@ -125,6 +144,31 @@ impl StandingStore {
             }
             cursor = next;
         }
+    }
+
+    pub fn introduction(&self, identity: &str) -> Result<Introduction> {
+        self.load_introduction(identity)
+    }
+
+    pub fn transition(&self, predecessor: &str) -> Result<Option<StandingChange>> {
+        let path = self.change_path(predecessor);
+        if !path.exists() {
+            return Ok(None);
+        }
+        Ok(Some(serde_json::from_slice(&fs::read(path)?)?))
+    }
+
+    pub fn current_for(&self, sender: &str, recipient: &str) -> Result<Option<Introduction>> {
+        let root = self.relationship_root_path(sender, recipient)?;
+        if !root.exists() {
+            return Ok(None);
+        }
+        let root: RelationshipRoot = serde_json::from_slice(&fs::read(root)?)?;
+        self.current(&root.first)
+    }
+
+    pub fn root(&self) -> &Path {
+        &self.root
     }
 
     pub fn proof(&self, introduction: &str, package: &Package) -> Result<Vec<u8>> {
@@ -219,6 +263,20 @@ impl StandingStore {
             .join("standing_secrets")
             .join(format!("{identity}.key"))
     }
+    fn relationship_root_path(&self, sender: &str, recipient: &str) -> Result<PathBuf> {
+        let digest = canonical::digest(&(sender, recipient))?;
+        Ok(self
+            .root
+            .join("standing_roots")
+            .join(format!("{}.json", digest.trim_start_matches("sha256:"))))
+    }
+}
+
+#[derive(Serialize, Deserialize)]
+struct RelationshipRoot {
+    sender: String,
+    recipient: String,
+    first: String,
 }
 
 pub fn package_proof(capability: &[u8], package: &Package) -> Result<Vec<u8>> {
@@ -355,6 +413,7 @@ mod tests {
                 change: "SC-one".into(),
                 predecessor: "IN-old".into(),
                 successor: Some("IN-new".into()),
+                cause: None,
                 changed_at_ms: 200,
             })
             .unwrap();

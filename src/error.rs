@@ -10,6 +10,8 @@ pub enum Error {
     MissingFact(String),
     #[error("simulated interruption after {0}")]
     Interrupted(&'static str),
+    #[error("CEREMONY_NOT_ADMITTED")]
+    CeremonyRefused,
     #[error("I/O failure: {0}")]
     Io(#[from] io::Error),
     #[error("JSON failure: {0}")]
