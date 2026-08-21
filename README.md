@@ -15,8 +15,13 @@ The pinned Compose laboratory gives checks and Host fixtures no network:
 docker compose run --rm checks
 docker compose run --rm rust-host /exchange/package.json /exchange/rust-observation.json
 docker compose run --rm shell-host /exchange/package.json /exchange/shell-observation.json
+docker compose run --rm native-interop
 ```
 
 The two fixtures are deliberately unlike one another. Neither owns a listener
 or receives an arrival signal: starting either command is explicit Host
 attention. Its output is application-owned observation, not PORTER disposition.
+
+`native-interop` independently exercises protected carriage in both directions:
+Python opens a Rust `PACKAGE` frame and Rust opens a Python `CEREMONY_RESULT`
+frame. The service has no network while the fixture runs.

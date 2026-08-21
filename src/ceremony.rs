@@ -13,6 +13,16 @@ use crate::{Error, Result};
 type HmacSha256 = Hmac<Sha256>;
 const MAX_CEREMONY_BYTES: usize = 32_768;
 
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub enum CeremonyCrashPoint {
+    None,
+    AfterPresented,
+    AfterAuthorityVerification,
+    AfterCandidate,
+    AfterChange,
+    AfterResult,
+}
+
 #[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
 pub struct CeremonialGrant {
     pub protocol: String,
@@ -115,7 +125,17 @@ impl CeremonyService {
         evidence: &CeremonyEvidence,
         at_ms: i64,
     ) -> Result<CeremonyResult> {
-        self.receive_inner(ceremony, evidence, at_ms, true)
+        self.receive_with_crash(ceremony, evidence, at_ms, CeremonyCrashPoint::None)
+    }
+
+    pub fn receive_with_crash(
+        &self,
+        ceremony: &Ceremony,
+        evidence: &CeremonyEvidence,
+        at_ms: i64,
+        crash: CeremonyCrashPoint,
+    ) -> Result<CeremonyResult> {
+        self.receive_inner(ceremony, evidence, at_ms, true, crash)
     }
 
     fn receive_inner(
@@ -124,6 +144,7 @@ impl CeremonyService {
         evidence: &CeremonyEvidence,
         at_ms: i64,
         drain: bool,
+        crash: CeremonyCrashPoint,
     ) -> Result<CeremonyResult> {
         if canonical::bytes(ceremony)?.len() > MAX_CEREMONY_BYTES || !self.valid_shape(ceremony) {
             return Err(Error::CeremonyRefused);
@@ -188,6 +209,14 @@ impl CeremonyService {
             },
             &ceremony.ceremony,
         )?;
+        interrupted(
+            crash == CeremonyCrashPoint::AfterPresented,
+            "ceremony presentation",
+        )?;
+        interrupted(
+            crash == CeremonyCrashPoint::AfterAuthorityVerification,
+            "ceremonial authority verification",
+        )?;
 
         if let (Some(successor), Some(terms), Some(capability)) = (
             ceremony.successor.as_ref(),
@@ -203,11 +232,15 @@ impl CeremonyService {
                     recipient: ceremony.recipient.clone(),
                     issuer: "CEREMONIAL_AUTHORITY".into(),
                     terms: terms.clone(),
-                    established_at_ms: at_ms,
+                    established_at_ms: ceremony.created_at_ms,
                 },
                 capability.as_bytes(),
             )?;
         }
+        interrupted(
+            crash == CeremonyCrashPoint::AfterCandidate,
+            "candidate Introduction",
+        )?;
         let change = StandingChange {
             protocol: "PORTER-STANDING/1".into(),
             kind: "STANDING_CHANGE".into(),
@@ -218,8 +251,10 @@ impl CeremonyService {
             changed_at_ms: at_ms,
         };
         self.standing.change(&change)?;
+        interrupted(crash == CeremonyCrashPoint::AfterChange, "SC")?;
         let result = self.applied_result(ceremony, &change)?;
         atomic_json(&result_path, &result)?;
+        interrupted(crash == CeremonyCrashPoint::AfterResult, "ceremony result")?;
         let _ = fs::remove_file(self.pending_path(&ceremony.ceremony));
         if drain {
             self.drain_pending(at_ms)?;
@@ -238,7 +273,13 @@ impl CeremonyService {
                 if current.as_ref().map(|value| value.introduction.as_str())
                     == Some(pending.ceremony.predecessor.as_str())
                 {
-                    self.receive_inner(&pending.ceremony, &pending.evidence, at_ms, false)?;
+                    self.receive_inner(
+                        &pending.ceremony,
+                        &pending.evidence,
+                        at_ms,
+                        false,
+                        CeremonyCrashPoint::None,
+                    )?;
                     progressed = true;
                     break;
                 }
@@ -469,6 +510,14 @@ fn safe_identity(value: &str) -> bool {
             .all(|byte| byte.is_ascii_alphanumeric() || byte == b'-' || byte == b'_')
 }
 
+fn interrupted(condition: bool, threshold: &'static str) -> Result<()> {
+    if condition {
+        Err(Error::Interrupted(threshold))
+    } else {
+        Ok(())
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use tempfile::TempDir;
@@ -633,5 +682,75 @@ mod tests {
             service.receive(&second, &evidence, 200),
             Err(Error::CeremonyRefused)
         ));
+    }
+
+    #[test]
+    fn crash_matrix_reconstructs_from_the_sc_threshold() {
+        for point in [
+            CeremonyCrashPoint::AfterPresented,
+            CeremonyCrashPoint::AfterAuthorityVerification,
+            CeremonyCrashPoint::AfterCandidate,
+            CeremonyCrashPoint::AfterChange,
+            CeremonyCrashPoint::AfterResult,
+        ] {
+            let (temporary, service) = setup(2, 2);
+            let value = ceremony("CM-crash", "IN-first", "IN-second");
+            let evidence = CeremonyService::evidence(CEREMONIAL, &value).unwrap();
+            assert!(matches!(
+                service.receive_with_crash(&value, &evidence, 200, point),
+                Err(Error::Interrupted(_))
+            ));
+
+            let restarted = CeremonyService::new(temporary.path(), "recipient").unwrap();
+            let standing = StandingStore::new(temporary.path()).unwrap();
+            let before_threshold = matches!(
+                point,
+                CeremonyCrashPoint::AfterPresented
+                    | CeremonyCrashPoint::AfterAuthorityVerification
+                    | CeremonyCrashPoint::AfterCandidate
+            );
+            assert_eq!(
+                standing
+                    .current_for("origin", "recipient")
+                    .unwrap()
+                    .unwrap()
+                    .introduction,
+                if before_threshold {
+                    "IN-first"
+                } else {
+                    "IN-second"
+                }
+            );
+
+            let repaired = restarted.receive(&value, &evidence, 300).unwrap();
+            assert_eq!(repaired.state, "APPLIED");
+            assert_eq!(repaired.successor.as_deref(), Some("IN-second"));
+            assert_eq!(
+                standing
+                    .current_for("origin", "recipient")
+                    .unwrap()
+                    .unwrap()
+                    .introduction,
+                "IN-second"
+            );
+            assert!(
+                temporary
+                    .path()
+                    .join("acceptances")
+                    .read_dir()
+                    .unwrap()
+                    .next()
+                    .is_none()
+            );
+            assert!(
+                temporary
+                    .path()
+                    .join("collections")
+                    .read_dir()
+                    .unwrap()
+                    .next()
+                    .is_none()
+            );
+        }
     }
 }

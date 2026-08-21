@@ -43,7 +43,12 @@ Status: live Generation Zero register. Entries are recorded before resolution.
 - Rust first observation: frame header, algorithms, AAD concepts and limits are
   normative, but exact HKDF info/salt, nonce placement, key ordering and envelope
   JSON bytes must be extracted from compatibility evidence.
-- Status: open and blocking native cross-implementation carriage.
+- Resolution evidence: the Generation Zero fixture now proves both directions:
+  Python opens a Rust-sealed `PACKAGE`, and Rust opens a Python-sealed
+  `CEREMONY_RESULT`, using the frozen header, metadata AAD, X25519/HKDF binding,
+  nonce/ciphertext envelope and canonical JSON common subset.
+- Status: resolved for the exercised JSON domain. D-001 remains open for the
+  full canonical-JSON value space and therefore still bounds general claims.
 
 ## D-005 — Introduction and standing fact schemas are not fully bound
 

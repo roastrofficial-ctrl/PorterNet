@@ -25,3 +25,8 @@ services:
     volumes:
       - ./demo:/exchange
       - ./fixtures:/fixtures:ro
+  native-interop:
+    build:
+      context: ..
+      dockerfile: PorterNet/Interop.Dockerfile
+    network_mode: none

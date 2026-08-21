@@ -12,6 +12,8 @@ pub enum Error {
     Interrupted(&'static str),
     #[error("CEREMONY_NOT_ADMITTED")]
     CeremonyRefused,
+    #[error("native carriage frame refused")]
+    NativeFrameRefused,
     #[error("I/O failure: {0}")]
     Io(#[from] io::Error),
     #[error("JSON failure: {0}")]
