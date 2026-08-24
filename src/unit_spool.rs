@@ -105,6 +105,20 @@ impl UnitSpool {
         Ok(values)
     }
 
+    pub fn awaiting(&self, expectation: &EvidenceExpectation) -> Result<Option<NativeUnit>> {
+        let mut matching = self
+            .pending()?
+            .into_iter()
+            .filter(|unit| unit.awaits.as_ref() == Some(expectation));
+        let first = matching.next();
+        if matching.next().is_some() {
+            return Err(Error::Invalid(
+                "multiple Units await the same evidence".into(),
+            ));
+        }
+        Ok(first)
+    }
+
     pub fn note_attempt(&self, unit: &str, at_ms: i64, accepted_by_transport: bool) -> Result<()> {
         validate_unit_identity(unit)?;
         if !self.outgoing_path(unit).exists() {
@@ -276,7 +290,7 @@ fn validate_evidence(outgoing: &NativeUnit, opened: &OpenedUnit, identity: &str)
             .is_some_and(|package| package == expected),
         (Some(EvidenceExpectation::Ceremony(expected)), UnitClass::CeremonyResult) => {
             serde_json::from_value::<CeremonyResult>(opened.value.clone())
-                .map(|result| result.ceremony == *expected)
+                .map(|result| result.ceremony == *expected && result.state == "APPLIED")
                 .unwrap_or(false)
         }
         _ => false,
