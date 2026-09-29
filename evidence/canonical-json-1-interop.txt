@@ -1,0 +1,16 @@
+Python canonical: 27 positive + 17 negative vectors; bytes/digests/proofs/idempotence PASS
+Rust canonical: 27 positive + 17 negative vectors; bytes/digests/proofs/idempotence PASS
+Python possession: 1 positive + 11 negative vectors PASS
+Rust possession: 1 positive + 11 negative vectors PASS
+Python ↔ Rust protected frame codec: PASS
+Rust node: 11 negative possession cases refused before AC
+Python LG -> protected carriage -> Rust possession -> durable AC: PASS
+Before independent attention: CL absent; adapter not started
+Independent attention -> durable CL; stop before adapter offer: PASS
+Adapter death after CL preserves exact custody fact: PASS
+Recovered CL -> frozen adapter opportunity; duplicate opportunity tolerated: PASS
+Lifecycle: LG -> AC -> later independent attention -> CL -> adapter opportunity PASS
+Canonical journeys: 27 Python LG -> Rust AC/replay -> independent CL/adapter PASS
+Reverse protected frames: 27 Python possession/AC/replay digests agree PASS
+Authenticated hostile JSON: 18 rejected by both native decoders; Rust AC/CL absent PASS
+D-003: valid reply_to Package refused before AC; no silent field removal PASS

@@ -34,22 +34,43 @@ Status: live Generation Zero register. Entries are recorded before resolution.
   `3fa7166781944e3afa3eaba25a97cdffd07fa8a5`. These construct reference carriage
   and check the new normative vector; they are not the source of its authority.
 - Status: **RESOLVED for possession given the specified canonical bytes**.
-  This does not close D-001 for all JSON values or D-005 for standing schemas.
+  D-001 now has a separate canonical binding; D-005 standing schemas remain open.
   Lifecycle results and their scope are in `PORTERNET-GENERATION-ZERO-CHECK.md`.
 
-## D-001 — Canonical JSON is architecturally required but incompletely bound
+## D-001 — Canonical Package bytes
 
-- Classification: specification ambiguity / reference binding.
-- Rust first observation: Package identity, proof and replay require identical
-  canonical bytes, while the frozen prose does not fully specify Unicode,
-  numeric and escaping rules.
-- Python reference: recursively sorted keys with compact `json.dumps` output.
-- PorterNet provisional behavior: recursively sorted UTF-8 compact JSON through
-  `serde_json`; interoperability fixtures must prove the common subset.
-- Resolution required: publish an explicit `PORTER-CANONICAL-JSON/1` binding or
-  replace representation-dependent identity with a specified canonical format.
-- Status: open; must be resolved before cross-language identity conformance can
-  be claimed generally.
+- Initial classification: **SPECIFICATION AMBIGUITY**. Existing documents require
+  canonical Package digests without uniquely fixing numbers, escaping or key
+  ordering. Neither language's serializer defaults were normative.
+- Additional reference inconsistency: Python possession used UTF-8 while
+  `carriage.package_digest` used ASCII escaping. Non-ASCII Packages therefore
+  had different possession and AC digests even within Python.
+- Amendment: [CANONICAL-JSON-1](spec/CANONICAL-JSON-1.md) adopts RFC 8785 JCS,
+  strict UTF-8 JSON parsing and an explicit binary64 numeric model. Duplicate
+  decoded names, invalid Unicode, invalid JSON and non-finite numbers fail
+  before admission. The whole Package contributes; no typed projection may be
+  hashed in its place. Binary64 rounding and unchanged Unicode normalization
+  forms are deliberate decisions, with fixed equivalence/distinction vectors.
+- Attribution against that amendment: **PYTHON DEFECT** (different digest paths,
+  default numeric formatting/order and permissive decoding) and **RUST DEFECT**
+  (default numeric formatting/order and permissive mapping construction).
+  Both use independently implemented JCS libraries with their own strict
+  parsers; there is no peer-specific or alternate Package digest path.
+- The Package binding must not rewrite local authority records. A trial global
+  serializer change rounded Rust's `i64::MAX` rendezvous sentinel and failed six
+  existing tests. Local record encoding and existing non-Package authority
+  bindings were explicitly separated and preserved, not numerically rewritten.
+  This is protocol scope separation, never a Package verification fallback.
+- Reference consultation: Python `introduction.py`, `carriage.py`, `native.py`,
+  and their imported authority serializers at base
+  `9750b4ce019c2f7337420824794d3ecf48b20684`; Rust base
+  `e43d876ca3ded19c89306053991768d7a49181fa`. RFC 8785 is the normative authority,
+  not the observed implementations. The vector fixes 27 positive byte/digest/
+  proof cases and 17 rejected raw inputs.
+- Status: binding defined; independent and custody evidence recorded in
+  `PORTERNET-CANONICAL-JSON-CHECK.md`. Migration of old histories and the full
+  Package schema are separate unresolved questions. D-007 records a dependency
+  defect found before expanded custody could run.
 
 ## D-002 — Canonical threshold durability is expressed semantically, not as an OS contract
 
@@ -96,3 +117,18 @@ Status: live Generation Zero register. Entries are recorded before resolution.
   their serialized representation is not yet claimed interoperable.
 - Status: open; compare language-neutral fixtures before promoting these Rust
   records or Python records into the PORTER/1 binding.
+
+## D-007 — Nested non-finite floats become null in a JCS dependency
+
+- Classification: RUST DEFECT against CANONICAL-JSON-1, including a dependency
+  behavior exposed by the independent rejection gate.
+- Observed: `serde_jcs` 0.2.0 rejects top-level NaN but serializes
+  `vec![f64::INFINITY]` as `[null]`. `serde_json::to_value` also loses this
+  distinction. This is not a permissible canonical equivalence.
+- The canonical gate failed before any expanded AC experiment ran.
+- Correction: capture typed values with `serde-value` 0.7.0, recursively reject
+  non-finite values and non-string object names, then use JCS for encoding.
+  No invalid value is repaired or mapped to null.
+- Regression: direct and nested invalid values are tested in addition to raw
+  hostile JSON vectors. Runtime network decoding rejects invalid tokens before
+  this step. Status: correction under validation in the D-001 experiment.

@@ -18,8 +18,9 @@ LF. Its object keys are recursively sorted, separators are comma and colon
 without whitespace, and its only numbers are decimal integers. The complete
 Package, including its identity, participates. No envelope field is removed.
 The vector's C is authoritative; regenerating expected outputs at test time is
-not conformance evidence. This amendment does not settle D-001 for all possible
-JSON numeric and Unicode values. Claims must identify that remaining scope.
+not conformance evidence. The subsequent [CANONICAL-JSON-1 amendment](CANONICAL-JSON-1.md) binds the
+numeric and Unicode rules beyond this original vector. This vector remains
+unchanged and must still pass.
 
 ## Required bytes and representation
 
@@ -43,7 +44,7 @@ JSON numeric and Unicode values. Claims must identify that remaining scope.
    No whitespace, padding, uppercase hex, or alternative proof encoding is
    permitted inside these values. Object order and inter-token JSON whitespace
    are immaterial. Unknown members have no authority and are ignored; duplicate
-   member names are outside this vector's input domain.
+   member names MUST be rejected by CANONICAL-JSON-1 decoding.
 7. Verification MUST check the vocabulary, recompute D from the exact Package,
    compare the complete digest representation, and verify P using K and M with
    constant-time cryptographic comparison. A base64 string containing P is NOT

@@ -5,7 +5,7 @@ use std::path::Path;
 use serde::Serialize;
 use uuid::Uuid;
 
-use crate::{Result, canonical};
+use crate::{Result, record_encoding};
 
 pub fn atomic_json<T: Serialize>(path: &Path, value: &T) -> Result<()> {
     let parent = path
@@ -24,7 +24,7 @@ pub fn atomic_json<T: Serialize>(path: &Path, value: &T) -> Result<()> {
             .write(true)
             .create_new(true)
             .open(&temporary)?;
-        stream.write_all(&canonical::bytes(value)?)?;
+        stream.write_all(&record_encoding::bytes(value)?)?;
         stream.write_all(b"\n")?;
         stream.sync_all()?;
         fs::rename(&temporary, path)?;

@@ -168,8 +168,16 @@ impl PorterNode {
     }
 
     fn receive_package(&self, opened: OpenedUnit, at_ms: i64) -> Result<Dispatch> {
+        let original_package = opened
+            .value
+            .get("package")
+            .ok_or(Error::NativeFrameRefused)?;
+        let original_bytes = crate::canonical::bytes(original_package)?;
         let carried: PackageCarriage =
             serde_json::from_value(opened.value).map_err(|_| Error::NativeFrameRefused)?;
+        if crate::canonical::bytes(&carried.package)? != original_bytes {
+            return Err(Error::NativeFrameRefused);
+        }
         if carried.package.sender != opened.sender || carried.package.recipient != opened.recipient
         {
             return Err(Error::NativeFrameRefused);

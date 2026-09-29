@@ -1,0 +1,19 @@
+E...................................................................
+======================================================================
+ERROR: test_claim_provider_supplies_identity_but_local_policy_supplies_terms (tests.test_introductions.IntroductionsUnderAttack.test_claim_provider_supplies_identity_but_local_policy_supplies_terms)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/porter/tests/test_introductions.py", line 90, in test_claim_provider_supplies_identity_but_local_policy_supplies_terms
+    again=establish_from_claim(self.root/"claim", "harmonicdb", claim, passport_adapter, "capability", terms())
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/porter/porter/introduction.py", line 125, in establish_from_claim
+    return establish(root, recipient, claim["subject"], secret, terms, claim["issuer"])
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/porter/porter/introduction.py", line 98, in establish
+    raise ValueError("Introduction identity already names different standing")
+ValueError: Introduction identity already names different standing
+
+----------------------------------------------------------------------
+Ran 68 tests in 5.720s
+
+FAILED (errors=1)

@@ -107,7 +107,8 @@ impl NativeFrame {
     ) -> Result<OpenedUnit> {
         let body = parse_frame(frame)?;
         let envelope: Envelope =
-            serde_json::from_slice(body).map_err(|_| Error::NativeFrameRefused)?;
+            serde_json::from_value(canonical::parse(body).map_err(|_| Error::NativeFrameRefused)?)
+                .map_err(|_| Error::NativeFrameRefused)?;
         if envelope.protocol != "PORTER-CARRIAGE/1"
             || envelope.version != VERSION
             || envelope.recipient != recipient.identity
@@ -144,7 +145,7 @@ impl NativeFrame {
                 },
             )
             .map_err(|_| Error::NativeFrameRefused)?;
-        let value = serde_json::from_slice(&clear).map_err(|_| Error::NativeFrameRefused)?;
+        let value = canonical::parse(&clear).map_err(|_| Error::NativeFrameRefused)?;
         Ok(OpenedUnit {
             unit: envelope.unit,
             class: envelope.class,

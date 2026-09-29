@@ -35,7 +35,7 @@ fn receive(arguments: &[String]) -> Result<(), Box<dyn std::error::Error>> {
 fn seal(arguments: &[String]) -> Result<(), Box<dyn std::error::Error>> {
     let sender = PorterIdentity::from_private_bytes(&arguments[1], key(&arguments[2])?)?;
     let class: UnitClass = serde_json::from_value(json!(arguments[5]))?;
-    let value: Value = serde_json::from_str(&arguments[7])?;
+    let value = porternet::canonical::parse(arguments[7].as_bytes())?;
     let frame = NativeFrame::seal(
         &value,
         &sender,

@@ -5,8 +5,8 @@ use hmac::{Hmac, Mac};
 use serde::{Deserialize, Serialize};
 use sha2::Sha256;
 
-use crate::canonical;
 use crate::publication::atomic_json;
+use crate::record_encoding as canonical;
 use crate::standing::{Introduction, StandingChange, StandingStore, Terms};
 use crate::{Error, Result};
 

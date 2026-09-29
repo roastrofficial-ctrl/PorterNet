@@ -16,6 +16,10 @@ def run(*arguments):
     ).strip()
 
 
+canonical_path = '/spec/vectors/canonical-json-1.json'
+runpy.run_path('/verify-canonical.py')['verify_vectors'](canonical_path)
+print(subprocess.check_output(['/usr/local/bin/canonical_fixture', canonical_path], text=True).strip(), flush=True)
+
 # Mandatory gate: both native implementations consume the SAME immutable file.
 vector_path = '/spec/vectors/package-possession-1.json'
 runpy.run_path('/verify-possession.py')['verify_vectors'](vector_path)
@@ -170,3 +174,6 @@ with tempfile.TemporaryDirectory() as directory:
     assert acceptance_path.read_bytes() == original_ac
     print('Recovered CL -> frozen adapter opportunity; duplicate opportunity tolerated: PASS', flush=True)
     print('Lifecycle: LG -> AC -> later independent attention -> CL -> adapter opportunity PASS', flush=True)
+
+# Both normative gates passed above; extend the proven journey's value domain.
+runpy.run_path('/canonical-interop.py')

@@ -8,8 +8,8 @@ use ed25519_dalek::{Signature, Signer, SigningKey, Verifier, VerifyingKey};
 use serde::{Deserialize, Serialize};
 use sha2::{Digest, Sha256};
 
-use crate::canonical;
 use crate::publication::atomic_json;
+use crate::record_encoding as canonical;
 use crate::{Error, Result};
 
 const MAX_EVIDENCE_BYTES: usize = 16_384;

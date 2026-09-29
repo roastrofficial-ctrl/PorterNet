@@ -331,7 +331,7 @@ fn safe_boundary_identity(value: &str) -> bool {
 
 fn publish_exact<T: Serialize>(path: &Path, value: &T, identity: &str) -> Result<()> {
     if path.exists() {
-        if fs::read(path)? != [canonical::bytes(value)?, b"\n".to_vec()].concat() {
+        if fs::read(path)? != [crate::record_encoding::bytes(value)?, b"\n".to_vec()].concat() {
             return Err(Error::IdentityCollision(identity.into()));
         }
         return Ok(());

@@ -9,6 +9,7 @@ pub mod native;
 pub mod node;
 pub mod possession;
 pub mod publication;
+mod record_encoding;
 pub mod rendezvous;
 pub mod standing;
 pub mod unit_spool;
