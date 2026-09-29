@@ -343,6 +343,23 @@ mod tests {
     }
 
     #[test]
+    fn python_admission_object_is_rejected_before_standing_lookup() {
+        // D-006: isolate the parse failure from unknown standing or bad keys.
+        let carried = json!({
+            "package": package(),
+            "admission": {
+                "vocabulary": "PORTER-INTRODUCTION/1",
+                "package_digest": "sha256:fixture",
+                "proof": "hmac-sha256:fixture"
+            }
+        });
+        let error = serde_json::from_value::<PackageCarriage>(carried)
+            .err()
+            .expect("Python admission object unexpectedly accepted; revisit D-006");
+        assert!(error.to_string().contains("expected a string"));
+    }
+
+    #[test]
     fn lost_evidence_then_exact_retry_repairs_origin_knowledge() {
         let temporary = TempDir::new().unwrap();
         let origin_root = temporary.path().join("origin");

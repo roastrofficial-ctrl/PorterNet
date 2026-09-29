@@ -5,7 +5,7 @@ use std::env;
 
 use base64::Engine;
 use base64::engine::general_purpose::STANDARD as BASE64;
-use porternet::{NativeFrame, PorterIdentity, UnitClass};
+use porternet::{NativeFrame, PorterIdentity, PorterNode, UnitClass};
 use serde_json::{Value, json};
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -13,8 +13,20 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     match arguments.first().map(String::as_str) {
         Some("seal") if arguments.len() == 8 => seal(&arguments),
         Some("open") if arguments.len() == 6 => open(&arguments),
+        Some("receive") if arguments.len() == 7 => receive(&arguments),
         _ => Err("native-fixture seal FROM PRIVATE TO PUBLIC CLASS UNIT JSON | open TO PRIVATE FROM PUBLIC FRAME".into()),
     }
+}
+
+// Experiment entry point: unlike `open`, this crosses the actual node dispatcher.
+// No Host process or Collection operation is reachable from arrival.
+fn receive(arguments: &[String]) -> Result<(), Box<dyn std::error::Error>> {
+    let recipient = PorterIdentity::from_private_bytes(&arguments[1], key(&arguments[2])?)?;
+    let peers = HashMap::from([(arguments[3].clone(), key(&arguments[4])?)]);
+    let node = PorterNode::new(&arguments[6], recipient, peers, HashMap::new())?;
+    let dispatch = node.receive(&BASE64.decode(&arguments[5])?, 1)?;
+    println!("{dispatch:?}");
+    Ok(())
 }
 
 fn seal(arguments: &[String]) -> Result<(), Box<dyn std::error::Error>> {

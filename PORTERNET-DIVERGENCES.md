@@ -2,6 +2,30 @@
 
 Status: live Generation Zero register. Entries are recorded before resolution.
 
+## D-006 — Protected Package decoding does not imply admission interoperability
+
+- Classification: SPECIFICATION AMBIGUITY; incompatible reference bindings
+  confirmed, final defect attribution pending specification review.
+- Python consultation: `porter/native.py` (`queue_package_custodian`, `receive`),
+  `porter/introduction.py` (`proof`, `verify_encoded_proof`), and
+  `porter/lodgement.py` (`lodge`) in reference commit
+  `3fa7166781944e3afa3eaba25a97cdffd07fa8a5`.
+- Python carries `admission` as an object containing `vocabulary`,
+  `package_digest`, and `proof`. Rust `node.rs::PackageCarriage` requires a
+  string holding base64 proof bytes. The authenticated Python payload therefore
+  fails Rust deserialization before standing lookup and before AC.
+- A second difference exists behind that failure: Python HMACs the unprefixed
+  hexadecimal SHA-256 digest; Rust `standing.rs` HMACs `sha256:` plus that digest.
+  Changing only the JSON shape cannot establish interoperability.
+- Evidence: `fixtures/python-native-interop.py` now lodges a real Python Package,
+  constructs reference possession evidence, seals it, proves Rust can decrypt
+  the unchanged payload, and sends the frame to `PorterNode::receive`. The
+  regression expects refusal and absence of AC/CL. A focused Rust test isolates
+  the object/string parse mismatch from missing relationship configuration.
+- Status: OPEN. No schema translation, admission bypass, or semantic fix applied.
+  The existing D-004 envelope result remains valid within its stated scope;
+  it does not establish Package admission or the correspondence lifecycle.
+
 ## D-001 — Canonical JSON is architecturally required but incompletely bound
 
 - Classification: specification ambiguity / reference binding.
