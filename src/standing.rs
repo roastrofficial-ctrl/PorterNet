@@ -1,9 +1,8 @@
 use std::fs;
 use std::path::{Path, PathBuf};
 
-use hmac::{Hmac, Mac};
 use serde::{Deserialize, Serialize};
-use sha2::Sha256;
+use serde_json::Value;
 use uuid::Uuid;
 
 use crate::canonical;
@@ -11,8 +10,6 @@ use crate::correspondence::{CrashPoint, PorterStore};
 use crate::model::{Acceptance, Collection, Package};
 use crate::publication::atomic_json;
 use crate::{Error, Result};
-
-type HmacSha256 = Hmac<Sha256>;
 
 #[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
 pub struct Terms {
@@ -171,7 +168,7 @@ impl StandingStore {
         &self.root
     }
 
-    pub fn proof(&self, introduction: &str, package: &Package) -> Result<Vec<u8>> {
+    pub fn proof(&self, introduction: &str, package: &Package) -> Result<Value> {
         let secret = fs::read(self.secret_path(introduction))?;
         package_proof(&secret, package)
     }
@@ -180,7 +177,7 @@ impl StandingStore {
         &self,
         first: &str,
         package: &Package,
-        proof: &[u8],
+        proof: &Value,
         at_ms: i64,
         crash: CrashPoint,
     ) -> Result<Admission> {
@@ -201,10 +198,7 @@ impl StandingStore {
             return Ok(Admission::Refused);
         }
         let secret = fs::read(self.secret_path(&current.introduction))?;
-        let mut verifier = HmacSha256::new_from_slice(&secret)
-            .map_err(|_| Error::Invalid("invalid standing capability".into()))?;
-        verifier.update(canonical::digest(package)?.as_bytes());
-        if verifier.verify_slice(proof).is_err() {
+        if !crate::possession::verify(&secret, package, proof)? {
             return Ok(Admission::Refused);
         }
         let (count, bytes) = self.outstanding(&current.sender, &current.recipient)?;
@@ -279,11 +273,8 @@ struct RelationshipRoot {
     first: String,
 }
 
-pub fn package_proof(capability: &[u8], package: &Package) -> Result<Vec<u8>> {
-    let mut mac = HmacSha256::new_from_slice(capability)
-        .map_err(|_| Error::Invalid("invalid standing capability".into()))?;
-    mac.update(canonical::digest(package)?.as_bytes());
-    Ok(mac.finalize().into_bytes().to_vec())
+pub fn package_proof(capability: &[u8], package: &Package) -> Result<Value> {
+    crate::possession::proof(capability, package)
 }
 
 fn validate_introduction(value: &Introduction) -> Result<()> {
@@ -383,7 +374,13 @@ mod tests {
             .admit("IN-old", &package, &proof, 100, CrashPoint::None)
             .unwrap();
         let replay = standing
-            .admit("IN-old", &package, b"now-invalid", 9_000, CrashPoint::None)
+            .admit(
+                "IN-old",
+                &package,
+                &json!("now-invalid"),
+                9_000,
+                CrashPoint::None,
+            )
             .unwrap();
         assert_eq!(first, replay);
     }
@@ -437,7 +434,7 @@ mod tests {
         let package = package("PKG-00000000000000000000000000000001");
         assert_eq!(
             standing
-                .admit("IN-one", &package, b"forgery", 100, CrashPoint::None)
+                .admit("IN-one", &package, &json!("forgery"), 100, CrashPoint::None)
                 .unwrap(),
             Admission::Refused
         );

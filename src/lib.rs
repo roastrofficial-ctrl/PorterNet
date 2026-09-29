@@ -7,6 +7,7 @@ pub mod error;
 pub mod model;
 pub mod native;
 pub mod node;
+pub mod possession;
 pub mod publication;
 pub mod rendezvous;
 pub mod standing;

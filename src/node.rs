@@ -57,7 +57,7 @@ impl PorterNode {
     pub fn queue_package(
         &self,
         package: &Package,
-        admission_proof: &[u8],
+        admission_proof: &Value,
         at_ms: i64,
     ) -> Result<NativeUnit> {
         if package.sender != self.identity.identity() {
@@ -73,7 +73,7 @@ impl PorterNode {
             recipient: package.recipient.clone(),
             value: serde_json::to_value(PackageCarriage {
                 package: package.clone(),
-                admission: BASE64.encode(admission_proof),
+                admission: admission_proof.clone(),
             })?,
             awaits: Some(EvidenceExpectation::Package(package.package.clone())),
             created_at_ms: at_ms,
@@ -178,11 +178,14 @@ impl PorterNode {
             .relationship_roots
             .get(&opened.sender)
             .ok_or(Error::CeremonyRefused)?;
-        let proof = BASE64
-            .decode(carried.admission)
-            .map_err(|_| Error::NativeFrameRefused)?;
         let standing = StandingStore::new(&self.root)?;
-        match standing.admit(first, &carried.package, &proof, at_ms, CrashPoint::None)? {
+        match standing.admit(
+            first,
+            &carried.package,
+            &carried.admission,
+            at_ms,
+            CrashPoint::None,
+        )? {
             Admission::Accepted(acceptance) => {
                 self.queue_evidence(
                     &opened.sender,
@@ -306,7 +309,7 @@ impl PorterNode {
 #[serde(deny_unknown_fields)]
 struct PackageCarriage {
     package: Package,
-    admission: String,
+    admission: Value,
 }
 
 #[derive(Serialize, Deserialize)]
@@ -340,23 +343,6 @@ mod tests {
             payload: json!({"meaning":"belongs elsewhere"}),
             in_reply_to: None,
         }
-    }
-
-    #[test]
-    fn python_admission_object_is_rejected_before_standing_lookup() {
-        // D-006: isolate the parse failure from unknown standing or bad keys.
-        let carried = json!({
-            "package": package(),
-            "admission": {
-                "vocabulary": "PORTER-INTRODUCTION/1",
-                "package_digest": "sha256:fixture",
-                "proof": "hmac-sha256:fixture"
-            }
-        });
-        let error = serde_json::from_value::<PackageCarriage>(carried)
-            .err()
-            .expect("Python admission object unexpectedly accepted; revisit D-006");
-        assert!(error.to_string().contains("expected a string"));
     }
 
     #[test]

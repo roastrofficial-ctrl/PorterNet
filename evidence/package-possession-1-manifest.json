@@ -1,0 +1,24 @@
+{
+  "date": "2026-09-29",
+  "python_reference_commit": "3fa7166781944e3afa3eaba25a97cdffd07fa8a5",
+  "rust_base_commit": "049fd9750279b524c1f4178f6beb6436add3c440",
+  "sha256": {
+    "spec/PACKAGE-POSSESSION-1.md": "266fd6cc1fd909e5220e2bae0ede34adcace11ab02aef6f137b90e98b9f9ceaf",
+    "spec/vectors/package-possession-1.json": "87fae8de7bf98d25e176a1e5985c96f6d3e631919137978b6c096812dee6dd45",
+    "src/possession.rs": "fb80835266ba20cb3c3471f06e6d6dab1056f8db9f583011504f8cb032f5247f",
+    "src/standing.rs": "b900f1f73e75b6f5a71c6536f7855048c517b052fc8cc24a4d1deaa668b527a8",
+    "src/node.rs": "4d637eb4e6f7cb43da0d7f993975b9db03d64d9582338e6aa454aa11744d9e68",
+    "src/bin/native_fixture.rs": "faa14fb8a429677fd6c57289e18f3831ebe841fb4252291308610eb4f88efd86",
+    "src/bin/host_attention.rs": "b55ef7e580b4494e131d6521c1303c3a4d06bef0ddce1baf6c5e9a21ad529aa2",
+    "fixtures/verify-possession.py": "9c08902b93168cb326c08b402fcfeaaba9ad4d7bb4cdcbce202e77eb07a4ccb1",
+    "fixtures/python-native-interop.py": "fdaee3fbb366dbae382a20423e58bea9522310b9ce2679deaed613f782345234",
+    "fixtures/opaque-adapter.py": "9343b85b83677997af114795804db7ae3333cc6a1bd4f65c5782cd8e2581f70a",
+    "Interop.Dockerfile": "07559c032953ad48404e826b2603ea7da5d4ce5358a1230b091de26da6a7061d"
+  },
+  "python_reference_sha256": {
+    "INTRODUCTIONS.md": "1fb64e1351c498af977d58d02bd4a73b7bcb0f63ef471394e1b24aa8f2339da5",
+    "porter/introduction.py": "3a7924636467a725f48bd73d4da6fab52b2d239babe6b1da43b35f476827a874",
+    "porter/lodgement.py": "42185020f1bc652b76a73ea3eaf50f2e63b71f704c2a3dc58d3ec261a2a25e65",
+    "porter/native.py": "b3575f7f9b84380056773955a0eeaf31d7ab8a6fe05b01cffb303f3a980a1213"
+  }
+}

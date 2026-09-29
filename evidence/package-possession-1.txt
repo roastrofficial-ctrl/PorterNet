@@ -1,0 +1,19 @@
+Executed 2026-09-29: docker compose run --rm native-interop
+Exit code: 0. Runtime network_mode: none.
+
+Python possession: 1 positive + 11 negative vectors PASS
+Rust possession: 1 positive + 11 negative vectors PASS
+Python ↔ Rust protected frame codec: PASS
+Rust node: 11 negative possession cases refused before AC
+Python LG -> protected carriage -> Rust possession -> durable AC: PASS
+Before independent attention: CL absent; adapter not started
+Independent attention -> durable CL; stop before adapter offer: PASS
+Adapter death after CL preserves exact custody fact: PASS
+Recovered CL -> frozen adapter opportunity; duplicate opportunity tolerated: PASS
+Lifecycle: LG -> AC -> later independent attention -> CL -> adapter opportunity PASS
+
+Executed: docker compose run --rm checks
+Exit code: 0. Runtime network_mode: none.
+cargo fmt --all -- --check: PASS
+cargo clippy --locked --all-targets -- -D warnings: PASS
+cargo test --locked --all-targets: 23 library tests + 1 normative vector test PASS

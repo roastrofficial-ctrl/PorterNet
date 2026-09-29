@@ -1,0 +1,156 @@
+{
+  "binding": "PORTER-PACKAGE-POSSESSION/1",
+  "package": {
+    "protocol": "PORTER/1",
+    "package": "PKG-00000000000000000000000000000001",
+    "from": "sender",
+    "to": "recipient",
+    "kind": "opaque.demo",
+    "created": 1,
+    "expires": 4102444800,
+    "payload": {
+      "opaque": "lab"
+    }
+  },
+  "canonical_package_utf8": "{\"created\":1,\"expires\":4102444800,\"from\":\"sender\",\"kind\":\"opaque.demo\",\"package\":\"PKG-00000000000000000000000000000001\",\"payload\":{\"opaque\":\"lab\"},\"protocol\":\"PORTER/1\",\"to\":\"recipient\"}",
+  "canonical_package_hex": "7b2263726561746564223a312c2265787069726573223a343130323434343830302c2266726f6d223a2273656e646572222c226b696e64223a226f70617175652e64656d6f222c227061636b616765223a22504b472d3030303030303030303030303030303030303030303030303030303030303031222c227061796c6f6164223a7b226f7061717565223a226c6162227d2c2270726f746f636f6c223a22504f525445522f31222c22746f223a22726563697069656e74227d",
+  "sha256_hex": "581ef853c3812e0d6ae100a72d72ed018bb1fea69e2a5ab5ae5948e904f8057a",
+  "digest_text": "sha256:581ef853c3812e0d6ae100a72d72ed018bb1fea69e2a5ab5ae5948e904f8057a",
+  "hmac_input_hex": "35383165663835336333383132653064366165313030613732643732656430313862623166656136396532613561623561653539343865393034663830353761",
+  "capability_hex": "666978747572652d736563726574",
+  "hmac_algorithm": "HMAC-SHA256",
+  "proof_hex": "35e8d846a1bd263b8fc55b3a7a8661d06298c8fea1f08316760015ad10bb0032",
+  "proof_encoding": "hmac-sha256: + lowercase hexadecimal",
+  "admission": {
+    "vocabulary": "PORTER-INTRODUCTION/1",
+    "package_digest": "sha256:581ef853c3812e0d6ae100a72d72ed018bb1fea69e2a5ab5ae5948e904f8057a",
+    "proof": "hmac-sha256:35e8d846a1bd263b8fc55b3a7a8661d06298c8fea1f08316760015ad10bb0032"
+  },
+  "negative": [
+    {
+      "name": "prefixed-digest-input",
+      "change": {
+        "admission": {
+          "vocabulary": "PORTER-INTRODUCTION/1",
+          "package_digest": "sha256:581ef853c3812e0d6ae100a72d72ed018bb1fea69e2a5ab5ae5948e904f8057a",
+          "proof": "hmac-sha256:e5abd5e579b0c00658bd4992aacb16dc9a3c9bf9c7c1dbe911c5ceceab4079c7"
+        }
+      },
+      "expected": false,
+      "counterexample_hmac_input_hex": "7368613235363a35383165663835336333383132653064366165313030613732643732656430313862623166656136396532613561623561653539343865393034663830353761"
+    },
+    {
+      "name": "raw-digest-input",
+      "change": {
+        "admission": {
+          "vocabulary": "PORTER-INTRODUCTION/1",
+          "package_digest": "sha256:581ef853c3812e0d6ae100a72d72ed018bb1fea69e2a5ab5ae5948e904f8057a",
+          "proof": "hmac-sha256:ee27dd7633c7f36ab686ac075c39e6731ef85a74296674c3f4b087eed5ebad7d"
+        }
+      },
+      "expected": false,
+      "counterexample_hmac_input_hex": "581ef853c3812e0d6ae100a72d72ed018bb1fea69e2a5ab5ae5948e904f8057a"
+    },
+    {
+      "name": "base64-proof-instead-of-object",
+      "change": {
+        "admission": "NejYRqG9JjuPxVs6eoZh0GKYyP6h8IMWdgAVrRC7ADI="
+      },
+      "expected": false
+    },
+    {
+      "name": "json-string-instead-of-object",
+      "change": {
+        "admission": "{\"vocabulary\":\"PORTER-INTRODUCTION/1\",\"package_digest\":\"sha256:581ef853c3812e0d6ae100a72d72ed018bb1fea69e2a5ab5ae5948e904f8057a\",\"proof\":\"hmac-sha256:35e8d846a1bd263b8fc55b3a7a8661d06298c8fea1f08316760015ad10bb0032\"}"
+      },
+      "expected": false
+    },
+    {
+      "name": "wrong-vocabulary",
+      "change": {
+        "admission": {
+          "vocabulary": "PORTER-INTRODUCTION/2",
+          "package_digest": "sha256:581ef853c3812e0d6ae100a72d72ed018bb1fea69e2a5ab5ae5948e904f8057a",
+          "proof": "hmac-sha256:35e8d846a1bd263b8fc55b3a7a8661d06298c8fea1f08316760015ad10bb0032"
+        }
+      },
+      "expected": false
+    },
+    {
+      "name": "digest-label-removed",
+      "change": {
+        "admission": {
+          "vocabulary": "PORTER-INTRODUCTION/1",
+          "package_digest": "581ef853c3812e0d6ae100a72d72ed018bb1fea69e2a5ab5ae5948e904f8057a",
+          "proof": "hmac-sha256:35e8d846a1bd263b8fc55b3a7a8661d06298c8fea1f08316760015ad10bb0032"
+        }
+      },
+      "expected": false
+    },
+    {
+      "name": "proof-bit-flip",
+      "change": {
+        "admission": {
+          "vocabulary": "PORTER-INTRODUCTION/1",
+          "package_digest": "sha256:581ef853c3812e0d6ae100a72d72ed018bb1fea69e2a5ab5ae5948e904f8057a",
+          "proof": "hmac-sha256:34e8d846a1bd263b8fc55b3a7a8661d06298c8fea1f08316760015ad10bb0032"
+        }
+      },
+      "expected": false
+    },
+    {
+      "name": "uppercase-proof",
+      "change": {
+        "admission": {
+          "vocabulary": "PORTER-INTRODUCTION/1",
+          "package_digest": "sha256:581ef853c3812e0d6ae100a72d72ed018bb1fea69e2a5ab5ae5948e904f8057a",
+          "proof": "hmac-sha256:35E8D846A1BD263B8FC55B3A7A8661D06298C8FEA1F08316760015AD10BB0032"
+        }
+      },
+      "expected": false
+    },
+    {
+      "name": "changed-key-byte",
+      "change": {
+        "capability_hex": "676978747572652d736563726574"
+      },
+      "expected": false
+    },
+    {
+      "name": "changed-package-identity",
+      "change": {
+        "package": {
+          "protocol": "PORTER/1",
+          "package": "PKG-00000000000000000000000000000002",
+          "from": "sender",
+          "to": "recipient",
+          "kind": "opaque.demo",
+          "created": 1,
+          "expires": 4102444800,
+          "payload": {
+            "opaque": "lab"
+          }
+        }
+      },
+      "expected": false
+    },
+    {
+      "name": "changed-payload",
+      "change": {
+        "package": {
+          "protocol": "PORTER/1",
+          "package": "PKG-00000000000000000000000000000001",
+          "from": "sender",
+          "to": "recipient",
+          "kind": "opaque.demo",
+          "created": 1,
+          "expires": 4102444800,
+          "payload": {
+            "opaque": "lag"
+          }
+        }
+      },
+      "expected": false
+    }
+  ]
+}

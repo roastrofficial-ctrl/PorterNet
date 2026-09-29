@@ -34,9 +34,11 @@ PORTER_REFERENCE_CONTEXT=/absolute/path/to/python-porter \
 
 The service has no network while the fixture runs.
 
-The fixture also attempts a Python-lodged Package through the Rust node receiver.
-It currently reproduces **D-006: admission representation mismatch before AC**.
-An exit-zero regression result confirms that known incompatibility; the full
-LG → AC → CL → adapter journey remains blocked. See
+The fixture gates custody on independent Python and Rust verification of the
+same [normative possession vector](spec/vectors/package-possession-1.json).
+The [binding amendment](spec/PACKAGE-POSSESSION-1.md) resolves D-006 without a
+compatibility path. Only after the positive and negative vectors agree does it
+exercise Python LG, Rust admission and AC, and later explicit local Host
+attention through CL and the frozen adapter boundary. See
 [`PORTERNET-GENERATION-ZERO-CHECK.md`](PORTERNET-GENERATION-ZERO-CHECK.md)
-for scope, provenance, and the next experiment.
+for the executed evidence and limits.

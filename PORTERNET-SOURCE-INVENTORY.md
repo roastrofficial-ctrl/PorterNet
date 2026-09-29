@@ -6,6 +6,7 @@ where Generation Zero obtains evidence without promoting reference choices.
 | Area | Normative sources | Executable reference vectors |
 |---|---|---|
 | LG/AC/CL, replay, isolation | `CONFORMANCE.md` | generation 1–6, history, custody tests |
+| Package-bound possession bytes | `spec/PACKAGE-POSSESSION-1.md` (normative amendment) | `spec/vectors/package-possession-1.json`; independent Python and Rust verifiers |
 | Introduction/admission | `INTRODUCTIONS.md`, `SECURITY-CHECK.md` normative assertions | introduction and renewal tests |
 | Succession | `STANDING-SUCCESSION.md` | renewal tests |
 | Ceremony | `CEREMONIES.md` | ceremony tests |

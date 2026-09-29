@@ -2,29 +2,40 @@
 
 Status: live Generation Zero register. Entries are recorded before resolution.
 
-## D-006 — Protected Package decoding does not imply admission interoperability
+## D-006 — Package-bound possession representation
 
-- Classification: SPECIFICATION AMBIGUITY; incompatible reference bindings
-  confirmed, final defect attribution pending specification review.
-- Python consultation: `porter/native.py` (`queue_package_custodian`, `receive`),
-  `porter/introduction.py` (`proof`, `verify_encoded_proof`), and
-  `porter/lodgement.py` (`lodge`) in reference commit
-  `3fa7166781944e3afa3eaba25a97cdffd07fa8a5`.
-- Python carries `admission` as an object containing `vocabulary`,
-  `package_digest`, and `proof`. Rust `node.rs::PackageCarriage` requires a
-  string holding base64 proof bytes. The authenticated Python payload therefore
-  fails Rust deserialization before standing lookup and before AC.
-- A second difference exists behind that failure: Python HMACs the unprefixed
-  hexadecimal SHA-256 digest; Rust `standing.rs` HMACs `sha256:` plus that digest.
-  Changing only the JSON shape cannot establish interoperability.
-- Evidence: `fixtures/python-native-interop.py` now lodges a real Python Package,
-  constructs reference possession evidence, seals it, proves Rust can decrypt
-  the unchanged payload, and sends the frame to `PorterNode::receive`. The
-  regression expects refusal and absence of AC/CL. A focused Rust test isolates
-  the object/string parse mismatch from missing relationship configuration.
-- Status: OPEN. No schema translation, admission bypass, or semantic fix applied.
-  The existing D-004 envelope result remains valid within its stated scope;
-  it does not establish Package admission or the correspondence lifecycle.
+- Initial attribution: **SPECIFICATION AMBIGUITY**. `INTRODUCTIONS.md` binds
+  HMAC-SHA256 to the canonical Package digest, but neither it,
+  `SECURITY-CHECK.md`, nor `NATIVE-CARRIAGE.md` uniquely selects the message
+  encoding or admission shape. Neither original implementation was uniquely
+  required by the pre-amendment prose.
+- Observed difference: Python sent a structured `vocabulary` / `package_digest`
+  / `proof` object and HMACed unprefixed lowercase digest hex. Rust sent a base64
+  proof string and HMACed `sha256:` plus hex. The original experiment stopped
+  before AC, despite successful protected decoding.
+- Normative resolution: [PACKAGE-POSSESSION-1](spec/PACKAGE-POSSESSION-1.md),
+  linked from `../porter/INTRODUCTIONS.md`, fixes exact capability octets,
+  SHA-256(C), lowercase unprefixed digest hex as HMAC input, HMAC-SHA256,
+  lowercase hex proof with `hmac-sha256:` evidence prefix, the complete
+  structured admission shape, and `PORTER-INTRODUCTION/1` vocabulary. Its
+  [fixed vector](spec/vectors/package-possession-1.json) supplies C byte for byte.
+- Final implementation attribution: **RUST DEFECT against the new amendment**.
+  Rust's old representation and message are replaced by one normative binding
+  in `src/possession.rs`, used by both standing and native node admission.
+  Python's production proof implementation already conforms and is unchanged.
+  Neither implementation accepts a compatibility fallback.
+- Evidence: both independent verifiers pass the identical positive vector and
+  11 negative cases before the lifecycle harness can attempt AC. Negative cases
+  specifically retain the former Rust HMAC input and encoded-proof shape as
+  rejected inputs. The receiver is then tested independently for pre-AC refusal.
+- Python consultations: `porter/introduction.py::{canonical,proof,verify_proof,
+  verify_encoded_proof}`, `porter/lodgement.py::lodge`, and
+  `porter/native.py::{seal,open_frame,queue_package_custodian,receive}` at
+  `3fa7166781944e3afa3eaba25a97cdffd07fa8a5`. These construct reference carriage
+  and check the new normative vector; they are not the source of its authority.
+- Status: **RESOLVED for possession given the specified canonical bytes**.
+  This does not close D-001 for all JSON values or D-005 for standing schemas.
+  Lifecycle results and their scope are in `PORTERNET-GENERATION-ZERO-CHECK.md`.
 
 ## D-001 — Canonical JSON is architecturally required but incompletely bound
 
