@@ -132,7 +132,7 @@ def experiment():
         print(f"Authenticated hostile JSON: {len(attacks)} rejected by both native decoders; Rust AC/CL absent PASS",flush=True)
 
         # A complete, valid Package must never be silently projected into the
-        # Rust model. reply_to is presently unsupported there (D-003).
+        # Rust model. Unknown fields must survive AC unchanged (D-003).
         extended = {**loads(suite['positive'][0]['package_input_utf8']), 'reply_to':'sender'}
         extended_proof = proof(secret,extended)
         assert verify_proof(secret,extended,extended_proof)
@@ -144,9 +144,10 @@ def experiment():
         run('establish',str(destination),json.dumps(introduction),suite['capability_hex'])
         received = subprocess.run(['/usr/local/bin/native_fixture','receive','recipient',recipient_private,
                                   'sender',sender_public,encoded,str(destination)],capture_output=True,text=True)
-        assert received.returncode != 0 and 'NativeFrameRefused' in received.stderr
-        assert not list((destination / 'acceptances').glob('*.json'))
-        print('D-003: valid reply_to Package refused before AC; no silent field removal PASS',flush=True)
+        assert received.returncode == 0, received.stderr
+        ac = json.loads(next((destination / 'acceptances').glob('*.json')).read_text())
+        assert canonical(ac['package']) == canonical(extended)
+        print('Complete Package: extension preserved through production AC PASS',flush=True)
 
 
 experiment()

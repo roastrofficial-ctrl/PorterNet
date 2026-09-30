@@ -1,0 +1,1186 @@
+[
+  {
+    "checkpoint": "after origin LG",
+    "canonical_facts": {
+      "python": {
+        "lodgements": [
+          {
+            "protocol": "PORTER/1",
+            "kind": "LODGEMENT",
+            "lodgement": "LG-53ea05b0198a4503b069739ef1f63adc",
+            "state": "LODGED",
+            "lodged_at_ms": 1790753496385,
+            "ticket": {
+              "protocol": "PORTER/1",
+              "ticket": "CT-bfacdd80ed9b4dd6a56a744c73b69251",
+              "package": "PKG-7814ef55e0fa4ba0a788b3409e4a388b",
+              "lodgement": "LG-53ea05b0198a4503b069739ef1f63adc",
+              "created": 1790753496,
+              "expires": 1790757096,
+              "abandoned": false,
+              "collected_return": null,
+              "events": [
+                {
+                  "event": "LODGED",
+                  "at_ms": 1790753496385,
+                  "details": {
+                    "lodgement": "LG-53ea05b0198a4503b069739ef1f63adc"
+                  }
+                }
+              ]
+            },
+            "package": {
+              "protocol": "PORTER/1",
+              "package": "PKG-7814ef55e0fa4ba0a788b3409e4a388b",
+              "from": "sender",
+              "to": "recipient",
+              "kind": "opaque.demo",
+              "created": 1790753496,
+              "expires": 1790757096,
+              "payload": {
+                "opaque": "é",
+                "number": 1.0
+              },
+              "future_field": {
+                "unchanged": [
+                  null,
+                  "𐀀"
+                ]
+              }
+            }
+          }
+        ],
+        "acceptances": [],
+        "collections": []
+      },
+      "rust": {
+        "lodgements": [],
+        "acceptances": [],
+        "collections": []
+      }
+    },
+    "recoverable_responsibility": "Python origin Porter",
+    "participant_knowledge": {
+      "statement": "Origin knows LG; recipient knows nothing",
+      "python_retained": {},
+      "rust_retained": {}
+    },
+    "reconstruction": "Outgoing Package from LG",
+    "unknown": "Remote AC and application action"
+  },
+  {
+    "checkpoint": "after protected carriage attempt",
+    "canonical_facts": {
+      "python": {
+        "lodgements": [
+          {
+            "protocol": "PORTER/1",
+            "kind": "LODGEMENT",
+            "lodgement": "LG-53ea05b0198a4503b069739ef1f63adc",
+            "state": "LODGED",
+            "lodged_at_ms": 1790753496385,
+            "ticket": {
+              "protocol": "PORTER/1",
+              "ticket": "CT-bfacdd80ed9b4dd6a56a744c73b69251",
+              "package": "PKG-7814ef55e0fa4ba0a788b3409e4a388b",
+              "lodgement": "LG-53ea05b0198a4503b069739ef1f63adc",
+              "created": 1790753496,
+              "expires": 1790757096,
+              "abandoned": false,
+              "collected_return": null,
+              "events": [
+                {
+                  "event": "LODGED",
+                  "at_ms": 1790753496385,
+                  "details": {
+                    "lodgement": "LG-53ea05b0198a4503b069739ef1f63adc"
+                  }
+                }
+              ]
+            },
+            "package": {
+              "protocol": "PORTER/1",
+              "package": "PKG-7814ef55e0fa4ba0a788b3409e4a388b",
+              "from": "sender",
+              "to": "recipient",
+              "kind": "opaque.demo",
+              "created": 1790753496,
+              "expires": 1790757096,
+              "payload": {
+                "opaque": "é",
+                "number": 1.0
+              },
+              "future_field": {
+                "unchanged": [
+                  null,
+                  "𐀀"
+                ]
+              }
+            }
+          }
+        ],
+        "acceptances": [],
+        "collections": []
+      },
+      "rust": {
+        "lodgements": [],
+        "acceptances": [],
+        "collections": []
+      }
+    },
+    "recoverable_responsibility": "Python origin Porter",
+    "participant_knowledge": {
+      "statement": "Origin has an attempt; no receipt",
+      "python_retained": {
+        "carriage/PKG-7814ef55e0fa4ba0a788b3409e4a388b.json": {
+          "protocol": "PORTER/1",
+          "kind": "CARRIAGE_KNOWLEDGE",
+          "package": "PKG-7814ef55e0fa4ba0a788b3409e4a388b",
+          "knowledge": "ACCEPTANCE_UNKNOWN",
+          "attempts": [
+            {
+              "attempt": 1,
+              "began_at_ms": 1790753496451
+            }
+          ]
+        }
+      },
+      "rust_retained": {}
+    },
+    "reconstruction": "Retry exact Package from LG",
+    "unknown": "Whether a remote AC occurred"
+  },
+  {
+    "checkpoint": "after recipient AC",
+    "canonical_facts": {
+      "python": {
+        "lodgements": [
+          {
+            "protocol": "PORTER/1",
+            "kind": "LODGEMENT",
+            "lodgement": "LG-53ea05b0198a4503b069739ef1f63adc",
+            "state": "LODGED",
+            "lodged_at_ms": 1790753496385,
+            "ticket": {
+              "protocol": "PORTER/1",
+              "ticket": "CT-bfacdd80ed9b4dd6a56a744c73b69251",
+              "package": "PKG-7814ef55e0fa4ba0a788b3409e4a388b",
+              "lodgement": "LG-53ea05b0198a4503b069739ef1f63adc",
+              "created": 1790753496,
+              "expires": 1790757096,
+              "abandoned": false,
+              "collected_return": null,
+              "events": [
+                {
+                  "event": "LODGED",
+                  "at_ms": 1790753496385,
+                  "details": {
+                    "lodgement": "LG-53ea05b0198a4503b069739ef1f63adc"
+                  }
+                }
+              ]
+            },
+            "package": {
+              "protocol": "PORTER/1",
+              "package": "PKG-7814ef55e0fa4ba0a788b3409e4a388b",
+              "from": "sender",
+              "to": "recipient",
+              "kind": "opaque.demo",
+              "created": 1790753496,
+              "expires": 1790757096,
+              "payload": {
+                "opaque": "é",
+                "number": 1.0
+              },
+              "future_field": {
+                "unchanged": [
+                  null,
+                  "𐀀"
+                ]
+              }
+            }
+          }
+        ],
+        "acceptances": [],
+        "collections": []
+      },
+      "rust": {
+        "lodgements": [],
+        "acceptances": [
+          {
+            "acceptance": "AC-a1e54ec865f049fa9116000b6ca40091",
+            "accepted_at_ms": 1,
+            "attests": "RECIPIENT_PORTER_ACCEPTED_DURABLE_RESPONSIBILITY",
+            "kind": "REMOTE_ACCEPTANCE",
+            "package": {
+              "created": 1790753496,
+              "expires": 1790757096,
+              "from": "sender",
+              "future_field": {
+                "unchanged": [
+                  null,
+                  "𐀀"
+                ]
+              },
+              "kind": "opaque.demo",
+              "package": "PKG-7814ef55e0fa4ba0a788b3409e4a388b",
+              "payload": {
+                "number": 1,
+                "opaque": "é"
+              },
+              "protocol": "PORTER/1",
+              "to": "recipient"
+            },
+            "package_digest": "sha256:bb852d151167b38ae52d4b8eb1469a05baaaf7086bc9f9a179ba35d859957db1",
+            "protocol": "PORTER/1",
+            "recipient": "recipient"
+          }
+        ],
+        "collections": []
+      }
+    },
+    "recoverable_responsibility": "Rust recipient Porter",
+    "participant_knowledge": {
+      "statement": "Rust knows AC; Python acceptance unknown",
+      "python_retained": {
+        "carriage/PKG-7814ef55e0fa4ba0a788b3409e4a388b.json": {
+          "protocol": "PORTER/1",
+          "kind": "CARRIAGE_KNOWLEDGE",
+          "package": "PKG-7814ef55e0fa4ba0a788b3409e4a388b",
+          "knowledge": "ACCEPTANCE_UNKNOWN",
+          "attempts": [
+            {
+              "attempt": 1,
+              "began_at_ms": 1790753496451
+            },
+            {
+              "attempt": 2,
+              "began_at_ms": 1790753496525
+            }
+          ]
+        }
+      },
+      "rust_retained": {}
+    },
+    "reconstruction": "AC reconstructs inbox and receipt",
+    "unknown": "Host action and origin evidence retention"
+  },
+  {
+    "checkpoint": "before origin retains AC evidence",
+    "canonical_facts": {
+      "python": {
+        "lodgements": [
+          {
+            "protocol": "PORTER/1",
+            "kind": "LODGEMENT",
+            "lodgement": "LG-53ea05b0198a4503b069739ef1f63adc",
+            "state": "LODGED",
+            "lodged_at_ms": 1790753496385,
+            "ticket": {
+              "protocol": "PORTER/1",
+              "ticket": "CT-bfacdd80ed9b4dd6a56a744c73b69251",
+              "package": "PKG-7814ef55e0fa4ba0a788b3409e4a388b",
+              "lodgement": "LG-53ea05b0198a4503b069739ef1f63adc",
+              "created": 1790753496,
+              "expires": 1790757096,
+              "abandoned": false,
+              "collected_return": null,
+              "events": [
+                {
+                  "event": "LODGED",
+                  "at_ms": 1790753496385,
+                  "details": {
+                    "lodgement": "LG-53ea05b0198a4503b069739ef1f63adc"
+                  }
+                }
+              ]
+            },
+            "package": {
+              "protocol": "PORTER/1",
+              "package": "PKG-7814ef55e0fa4ba0a788b3409e4a388b",
+              "from": "sender",
+              "to": "recipient",
+              "kind": "opaque.demo",
+              "created": 1790753496,
+              "expires": 1790757096,
+              "payload": {
+                "opaque": "é",
+                "number": 1.0
+              },
+              "future_field": {
+                "unchanged": [
+                  null,
+                  "𐀀"
+                ]
+              }
+            }
+          }
+        ],
+        "acceptances": [],
+        "collections": []
+      },
+      "rust": {
+        "lodgements": [],
+        "acceptances": [
+          {
+            "acceptance": "AC-a1e54ec865f049fa9116000b6ca40091",
+            "accepted_at_ms": 1,
+            "attests": "RECIPIENT_PORTER_ACCEPTED_DURABLE_RESPONSIBILITY",
+            "kind": "REMOTE_ACCEPTANCE",
+            "package": {
+              "created": 1790753496,
+              "expires": 1790757096,
+              "from": "sender",
+              "future_field": {
+                "unchanged": [
+                  null,
+                  "𐀀"
+                ]
+              },
+              "kind": "opaque.demo",
+              "package": "PKG-7814ef55e0fa4ba0a788b3409e4a388b",
+              "payload": {
+                "number": 1,
+                "opaque": "é"
+              },
+              "protocol": "PORTER/1",
+              "to": "recipient"
+            },
+            "package_digest": "sha256:bb852d151167b38ae52d4b8eb1469a05baaaf7086bc9f9a179ba35d859957db1",
+            "protocol": "PORTER/1",
+            "recipient": "recipient"
+          }
+        ],
+        "collections": []
+      }
+    },
+    "recoverable_responsibility": "Rust recipient Porter",
+    "participant_knowledge": {
+      "statement": "Recipient AC; origin acceptance unknown",
+      "python_retained": {
+        "carriage/PKG-7814ef55e0fa4ba0a788b3409e4a388b.json": {
+          "protocol": "PORTER/1",
+          "kind": "CARRIAGE_KNOWLEDGE",
+          "package": "PKG-7814ef55e0fa4ba0a788b3409e4a388b",
+          "knowledge": "ACCEPTANCE_UNKNOWN",
+          "attempts": [
+            {
+              "attempt": 1,
+              "began_at_ms": 1790753496451
+            },
+            {
+              "attempt": 2,
+              "began_at_ms": 1790753496525
+            }
+          ]
+        }
+      },
+      "rust_retained": {}
+    },
+    "reconstruction": "Exact replay regenerates original receipt",
+    "unknown": "Origin has not retained evidence"
+  },
+  {
+    "checkpoint": "after recipient AC before attention",
+    "canonical_facts": {
+      "python": {
+        "lodgements": [
+          {
+            "protocol": "PORTER/1",
+            "kind": "LODGEMENT",
+            "lodgement": "LG-53ea05b0198a4503b069739ef1f63adc",
+            "state": "LODGED",
+            "lodged_at_ms": 1790753496385,
+            "ticket": {
+              "protocol": "PORTER/1",
+              "ticket": "CT-bfacdd80ed9b4dd6a56a744c73b69251",
+              "package": "PKG-7814ef55e0fa4ba0a788b3409e4a388b",
+              "lodgement": "LG-53ea05b0198a4503b069739ef1f63adc",
+              "created": 1790753496,
+              "expires": 1790757096,
+              "abandoned": false,
+              "collected_return": null,
+              "events": [
+                {
+                  "event": "LODGED",
+                  "at_ms": 1790753496385,
+                  "details": {
+                    "lodgement": "LG-53ea05b0198a4503b069739ef1f63adc"
+                  }
+                }
+              ]
+            },
+            "package": {
+              "protocol": "PORTER/1",
+              "package": "PKG-7814ef55e0fa4ba0a788b3409e4a388b",
+              "from": "sender",
+              "to": "recipient",
+              "kind": "opaque.demo",
+              "created": 1790753496,
+              "expires": 1790757096,
+              "payload": {
+                "opaque": "é",
+                "number": 1.0
+              },
+              "future_field": {
+                "unchanged": [
+                  null,
+                  "𐀀"
+                ]
+              }
+            }
+          }
+        ],
+        "acceptances": [],
+        "collections": []
+      },
+      "rust": {
+        "lodgements": [],
+        "acceptances": [
+          {
+            "acceptance": "AC-a1e54ec865f049fa9116000b6ca40091",
+            "accepted_at_ms": 1,
+            "attests": "RECIPIENT_PORTER_ACCEPTED_DURABLE_RESPONSIBILITY",
+            "kind": "REMOTE_ACCEPTANCE",
+            "package": {
+              "created": 1790753496,
+              "expires": 1790757096,
+              "from": "sender",
+              "future_field": {
+                "unchanged": [
+                  null,
+                  "𐀀"
+                ]
+              },
+              "kind": "opaque.demo",
+              "package": "PKG-7814ef55e0fa4ba0a788b3409e4a388b",
+              "payload": {
+                "number": 1,
+                "opaque": "é"
+              },
+              "protocol": "PORTER/1",
+              "to": "recipient"
+            },
+            "package_digest": "sha256:bb852d151167b38ae52d4b8eb1469a05baaaf7086bc9f9a179ba35d859957db1",
+            "protocol": "PORTER/1",
+            "recipient": "recipient"
+          }
+        ],
+        "collections": []
+      }
+    },
+    "recoverable_responsibility": "Rust recipient Porter",
+    "participant_knowledge": {
+      "statement": "Both Porters know AC; Host has no CL",
+      "python_retained": {
+        "carriage/PKG-7814ef55e0fa4ba0a788b3409e4a388b.json": {
+          "protocol": "PORTER/1",
+          "kind": "CARRIAGE_KNOWLEDGE",
+          "package": "PKG-7814ef55e0fa4ba0a788b3409e4a388b",
+          "knowledge": "REMOTE_ACCEPTANCE_KNOWN",
+          "attempts": [
+            {
+              "attempt": 1,
+              "began_at_ms": 1790753496451
+            },
+            {
+              "attempt": 2,
+              "began_at_ms": 1790753496525
+            }
+          ],
+          "acceptance_evidence": {
+            "acceptance": "AC-a1e54ec865f049fa9116000b6ca40091",
+            "accepted_at_ms": 1,
+            "attests": "RECIPIENT_PORTER_ACCEPTED_RESPONSIBILITY",
+            "kind": "RECEIPT",
+            "package": "PKG-7814ef55e0fa4ba0a788b3409e4a388b",
+            "package_digest": "sha256:bb852d151167b38ae52d4b8eb1469a05baaaf7086bc9f9a179ba35d859957db1",
+            "protocol": "PORTER/1",
+            "recipient": "recipient",
+            "state": "REMOTE_PORTER_DURABLY_ACCEPTED"
+          },
+          "learned_at_ms": 1790753496602
+        },
+        "receipts/PKG-7814ef55e0fa4ba0a788b3409e4a388b.json": {
+          "acceptance": "AC-a1e54ec865f049fa9116000b6ca40091",
+          "accepted_at_ms": 1,
+          "attests": "RECIPIENT_PORTER_ACCEPTED_RESPONSIBILITY",
+          "kind": "RECEIPT",
+          "package": "PKG-7814ef55e0fa4ba0a788b3409e4a388b",
+          "package_digest": "sha256:bb852d151167b38ae52d4b8eb1469a05baaaf7086bc9f9a179ba35d859957db1",
+          "protocol": "PORTER/1",
+          "recipient": "recipient",
+          "state": "REMOTE_PORTER_DURABLY_ACCEPTED"
+        },
+        "native/evidence/acceptances/PKG-7814ef55e0fa4ba0a788b3409e4a388b--recipient.json": {
+          "protocol": "PORTER-CUSTODIAN-EVIDENCE/1",
+          "kind": "CUSTODIAN_ACCEPTANCE_KNOWN",
+          "custodian": "recipient",
+          "unit": "CU-PKG-PKG-7814ef55e0fa4ba0a788b3409e4a388b",
+          "recipient": "recipient",
+          "package": "PKG-7814ef55e0fa4ba0a788b3409e4a388b",
+          "package_digest": "sha256:bb852d151167b38ae52d4b8eb1469a05baaaf7086bc9f9a179ba35d859957db1",
+          "receipt": {
+            "acceptance": "AC-a1e54ec865f049fa9116000b6ca40091",
+            "accepted_at_ms": 1,
+            "attests": "RECIPIENT_PORTER_ACCEPTED_RESPONSIBILITY",
+            "kind": "RECEIPT",
+            "package": "PKG-7814ef55e0fa4ba0a788b3409e4a388b",
+            "package_digest": "sha256:bb852d151167b38ae52d4b8eb1469a05baaaf7086bc9f9a179ba35d859957db1",
+            "protocol": "PORTER/1",
+            "recipient": "recipient",
+            "state": "REMOTE_PORTER_DURABLY_ACCEPTED"
+          }
+        }
+      },
+      "rust_retained": {}
+    },
+    "reconstruction": "Candidate from AC",
+    "unknown": "Future attention and application meaning"
+  },
+  {
+    "checkpoint": "after recipient CL before adapter offer",
+    "canonical_facts": {
+      "python": {
+        "lodgements": [
+          {
+            "protocol": "PORTER/1",
+            "kind": "LODGEMENT",
+            "lodgement": "LG-53ea05b0198a4503b069739ef1f63adc",
+            "state": "LODGED",
+            "lodged_at_ms": 1790753496385,
+            "ticket": {
+              "protocol": "PORTER/1",
+              "ticket": "CT-bfacdd80ed9b4dd6a56a744c73b69251",
+              "package": "PKG-7814ef55e0fa4ba0a788b3409e4a388b",
+              "lodgement": "LG-53ea05b0198a4503b069739ef1f63adc",
+              "created": 1790753496,
+              "expires": 1790757096,
+              "abandoned": false,
+              "collected_return": null,
+              "events": [
+                {
+                  "event": "LODGED",
+                  "at_ms": 1790753496385,
+                  "details": {
+                    "lodgement": "LG-53ea05b0198a4503b069739ef1f63adc"
+                  }
+                }
+              ]
+            },
+            "package": {
+              "protocol": "PORTER/1",
+              "package": "PKG-7814ef55e0fa4ba0a788b3409e4a388b",
+              "from": "sender",
+              "to": "recipient",
+              "kind": "opaque.demo",
+              "created": 1790753496,
+              "expires": 1790757096,
+              "payload": {
+                "opaque": "é",
+                "number": 1.0
+              },
+              "future_field": {
+                "unchanged": [
+                  null,
+                  "𐀀"
+                ]
+              }
+            }
+          }
+        ],
+        "acceptances": [],
+        "collections": []
+      },
+      "rust": {
+        "lodgements": [],
+        "acceptances": [
+          {
+            "acceptance": "AC-a1e54ec865f049fa9116000b6ca40091",
+            "accepted_at_ms": 1,
+            "attests": "RECIPIENT_PORTER_ACCEPTED_DURABLE_RESPONSIBILITY",
+            "kind": "REMOTE_ACCEPTANCE",
+            "package": {
+              "created": 1790753496,
+              "expires": 1790757096,
+              "from": "sender",
+              "future_field": {
+                "unchanged": [
+                  null,
+                  "𐀀"
+                ]
+              },
+              "kind": "opaque.demo",
+              "package": "PKG-7814ef55e0fa4ba0a788b3409e4a388b",
+              "payload": {
+                "number": 1,
+                "opaque": "é"
+              },
+              "protocol": "PORTER/1",
+              "to": "recipient"
+            },
+            "package_digest": "sha256:bb852d151167b38ae52d4b8eb1469a05baaaf7086bc9f9a179ba35d859957db1",
+            "protocol": "PORTER/1",
+            "recipient": "recipient"
+          }
+        ],
+        "collections": [
+          {
+            "acceptance": "AC-a1e54ec865f049fa9116000b6ca40091",
+            "attests": "PACKAGE_RECOVERABLY_TRANSFERRED_TO_HOST_CUSTODY",
+            "collected_at_ms": 2,
+            "collection": "CL-4d5614027afb4c8c9c93df5f384c58ed",
+            "collector": "local-host",
+            "kind": "COLLECTION",
+            "package": {
+              "created": 1790753496,
+              "expires": 1790757096,
+              "from": "sender",
+              "future_field": {
+                "unchanged": [
+                  null,
+                  "𐀀"
+                ]
+              },
+              "kind": "opaque.demo",
+              "package": "PKG-7814ef55e0fa4ba0a788b3409e4a388b",
+              "payload": {
+                "number": 1,
+                "opaque": "é"
+              },
+              "protocol": "PORTER/1",
+              "to": "recipient"
+            },
+            "protocol": "PORTER/1"
+          }
+        ]
+      }
+    },
+    "recoverable_responsibility": "Rust local Host custody",
+    "participant_knowledge": {
+      "statement": "CL is durable; no adapter offer",
+      "python_retained": {
+        "carriage/PKG-7814ef55e0fa4ba0a788b3409e4a388b.json": {
+          "protocol": "PORTER/1",
+          "kind": "CARRIAGE_KNOWLEDGE",
+          "package": "PKG-7814ef55e0fa4ba0a788b3409e4a388b",
+          "knowledge": "REMOTE_ACCEPTANCE_KNOWN",
+          "attempts": [
+            {
+              "attempt": 1,
+              "began_at_ms": 1790753496451
+            },
+            {
+              "attempt": 2,
+              "began_at_ms": 1790753496525
+            }
+          ],
+          "acceptance_evidence": {
+            "acceptance": "AC-a1e54ec865f049fa9116000b6ca40091",
+            "accepted_at_ms": 1,
+            "attests": "RECIPIENT_PORTER_ACCEPTED_RESPONSIBILITY",
+            "kind": "RECEIPT",
+            "package": "PKG-7814ef55e0fa4ba0a788b3409e4a388b",
+            "package_digest": "sha256:bb852d151167b38ae52d4b8eb1469a05baaaf7086bc9f9a179ba35d859957db1",
+            "protocol": "PORTER/1",
+            "recipient": "recipient",
+            "state": "REMOTE_PORTER_DURABLY_ACCEPTED"
+          },
+          "learned_at_ms": 1790753496602
+        },
+        "receipts/PKG-7814ef55e0fa4ba0a788b3409e4a388b.json": {
+          "acceptance": "AC-a1e54ec865f049fa9116000b6ca40091",
+          "accepted_at_ms": 1,
+          "attests": "RECIPIENT_PORTER_ACCEPTED_RESPONSIBILITY",
+          "kind": "RECEIPT",
+          "package": "PKG-7814ef55e0fa4ba0a788b3409e4a388b",
+          "package_digest": "sha256:bb852d151167b38ae52d4b8eb1469a05baaaf7086bc9f9a179ba35d859957db1",
+          "protocol": "PORTER/1",
+          "recipient": "recipient",
+          "state": "REMOTE_PORTER_DURABLY_ACCEPTED"
+        },
+        "native/evidence/acceptances/PKG-7814ef55e0fa4ba0a788b3409e4a388b--recipient.json": {
+          "protocol": "PORTER-CUSTODIAN-EVIDENCE/1",
+          "kind": "CUSTODIAN_ACCEPTANCE_KNOWN",
+          "custodian": "recipient",
+          "unit": "CU-PKG-PKG-7814ef55e0fa4ba0a788b3409e4a388b",
+          "recipient": "recipient",
+          "package": "PKG-7814ef55e0fa4ba0a788b3409e4a388b",
+          "package_digest": "sha256:bb852d151167b38ae52d4b8eb1469a05baaaf7086bc9f9a179ba35d859957db1",
+          "receipt": {
+            "acceptance": "AC-a1e54ec865f049fa9116000b6ca40091",
+            "accepted_at_ms": 1,
+            "attests": "RECIPIENT_PORTER_ACCEPTED_RESPONSIBILITY",
+            "kind": "RECEIPT",
+            "package": "PKG-7814ef55e0fa4ba0a788b3409e4a388b",
+            "package_digest": "sha256:bb852d151167b38ae52d4b8eb1469a05baaaf7086bc9f9a179ba35d859957db1",
+            "protocol": "PORTER/1",
+            "recipient": "recipient",
+            "state": "REMOTE_PORTER_DURABLY_ACCEPTED"
+          }
+        }
+      },
+      "rust_retained": {}
+    },
+    "reconstruction": "Same CL can be offered after restart",
+    "unknown": "Application action"
+  },
+  {
+    "checkpoint": "after Return LG",
+    "canonical_facts": {
+      "python": {
+        "lodgements": [
+          {
+            "protocol": "PORTER/1",
+            "kind": "LODGEMENT",
+            "lodgement": "LG-53ea05b0198a4503b069739ef1f63adc",
+            "state": "LODGED",
+            "lodged_at_ms": 1790753496385,
+            "ticket": {
+              "protocol": "PORTER/1",
+              "ticket": "CT-bfacdd80ed9b4dd6a56a744c73b69251",
+              "package": "PKG-7814ef55e0fa4ba0a788b3409e4a388b",
+              "lodgement": "LG-53ea05b0198a4503b069739ef1f63adc",
+              "created": 1790753496,
+              "expires": 1790757096,
+              "abandoned": false,
+              "collected_return": null,
+              "events": [
+                {
+                  "event": "LODGED",
+                  "at_ms": 1790753496385,
+                  "details": {
+                    "lodgement": "LG-53ea05b0198a4503b069739ef1f63adc"
+                  }
+                }
+              ]
+            },
+            "package": {
+              "protocol": "PORTER/1",
+              "package": "PKG-7814ef55e0fa4ba0a788b3409e4a388b",
+              "from": "sender",
+              "to": "recipient",
+              "kind": "opaque.demo",
+              "created": 1790753496,
+              "expires": 1790757096,
+              "payload": {
+                "opaque": "é",
+                "number": 1.0
+              },
+              "future_field": {
+                "unchanged": [
+                  null,
+                  "𐀀"
+                ]
+              }
+            }
+          }
+        ],
+        "acceptances": [],
+        "collections": []
+      },
+      "rust": {
+        "lodgements": [
+          {
+            "attests": "PACKAGE_RECOVERABLY_LODGED_WITH_ORIGIN_PORTER",
+            "kind": "LODGEMENT",
+            "lodged_at_ms": 1,
+            "lodgement": "LG-f7777cf8554b4e559cfd19356a8067d8",
+            "package": {
+              "created": 1790753496,
+              "expires": 1790757096,
+              "from": "recipient",
+              "future_field": {
+                "unchanged": [
+                  null,
+                  "𐀀"
+                ]
+              },
+              "in_reply_to": "PKG-7814ef55e0fa4ba0a788b3409e4a388b",
+              "kind": "opaque.demo",
+              "package": "PKG-d48a9d2222e33b282c06b1b344466a94",
+              "payload": {
+                "opaque": "return"
+              },
+              "protocol": "PORTER/1",
+              "to": "sender"
+            },
+            "package_digest": "sha256:102cfcb960238ec54d70542ad822a4d5b673e8a9f29fabddc06b028c1f7769fa",
+            "protocol": "PORTER/1"
+          }
+        ],
+        "acceptances": [
+          {
+            "acceptance": "AC-a1e54ec865f049fa9116000b6ca40091",
+            "accepted_at_ms": 1,
+            "attests": "RECIPIENT_PORTER_ACCEPTED_DURABLE_RESPONSIBILITY",
+            "kind": "REMOTE_ACCEPTANCE",
+            "package": {
+              "created": 1790753496,
+              "expires": 1790757096,
+              "from": "sender",
+              "future_field": {
+                "unchanged": [
+                  null,
+                  "𐀀"
+                ]
+              },
+              "kind": "opaque.demo",
+              "package": "PKG-7814ef55e0fa4ba0a788b3409e4a388b",
+              "payload": {
+                "number": 1,
+                "opaque": "é"
+              },
+              "protocol": "PORTER/1",
+              "to": "recipient"
+            },
+            "package_digest": "sha256:bb852d151167b38ae52d4b8eb1469a05baaaf7086bc9f9a179ba35d859957db1",
+            "protocol": "PORTER/1",
+            "recipient": "recipient"
+          }
+        ],
+        "collections": [
+          {
+            "acceptance": "AC-a1e54ec865f049fa9116000b6ca40091",
+            "attests": "PACKAGE_RECOVERABLY_TRANSFERRED_TO_HOST_CUSTODY",
+            "collected_at_ms": 2,
+            "collection": "CL-4d5614027afb4c8c9c93df5f384c58ed",
+            "collector": "local-host",
+            "kind": "COLLECTION",
+            "package": {
+              "created": 1790753496,
+              "expires": 1790757096,
+              "from": "sender",
+              "future_field": {
+                "unchanged": [
+                  null,
+                  "𐀀"
+                ]
+              },
+              "kind": "opaque.demo",
+              "package": "PKG-7814ef55e0fa4ba0a788b3409e4a388b",
+              "payload": {
+                "number": 1,
+                "opaque": "é"
+              },
+              "protocol": "PORTER/1",
+              "to": "recipient"
+            },
+            "protocol": "PORTER/1"
+          }
+        ]
+      }
+    },
+    "recoverable_responsibility": "Rust origin Porter for Return; Rust Host for original",
+    "participant_knowledge": {
+      "statement": "Rust knows Return LG; Python knows no Return AC",
+      "python_retained": {
+        "carriage/PKG-7814ef55e0fa4ba0a788b3409e4a388b.json": {
+          "protocol": "PORTER/1",
+          "kind": "CARRIAGE_KNOWLEDGE",
+          "package": "PKG-7814ef55e0fa4ba0a788b3409e4a388b",
+          "knowledge": "REMOTE_ACCEPTANCE_KNOWN",
+          "attempts": [
+            {
+              "attempt": 1,
+              "began_at_ms": 1790753496451
+            },
+            {
+              "attempt": 2,
+              "began_at_ms": 1790753496525
+            }
+          ],
+          "acceptance_evidence": {
+            "acceptance": "AC-a1e54ec865f049fa9116000b6ca40091",
+            "accepted_at_ms": 1,
+            "attests": "RECIPIENT_PORTER_ACCEPTED_RESPONSIBILITY",
+            "kind": "RECEIPT",
+            "package": "PKG-7814ef55e0fa4ba0a788b3409e4a388b",
+            "package_digest": "sha256:bb852d151167b38ae52d4b8eb1469a05baaaf7086bc9f9a179ba35d859957db1",
+            "protocol": "PORTER/1",
+            "recipient": "recipient",
+            "state": "REMOTE_PORTER_DURABLY_ACCEPTED"
+          },
+          "learned_at_ms": 1790753496602
+        },
+        "receipts/PKG-7814ef55e0fa4ba0a788b3409e4a388b.json": {
+          "acceptance": "AC-a1e54ec865f049fa9116000b6ca40091",
+          "accepted_at_ms": 1,
+          "attests": "RECIPIENT_PORTER_ACCEPTED_RESPONSIBILITY",
+          "kind": "RECEIPT",
+          "package": "PKG-7814ef55e0fa4ba0a788b3409e4a388b",
+          "package_digest": "sha256:bb852d151167b38ae52d4b8eb1469a05baaaf7086bc9f9a179ba35d859957db1",
+          "protocol": "PORTER/1",
+          "recipient": "recipient",
+          "state": "REMOTE_PORTER_DURABLY_ACCEPTED"
+        },
+        "native/evidence/acceptances/PKG-7814ef55e0fa4ba0a788b3409e4a388b--recipient.json": {
+          "protocol": "PORTER-CUSTODIAN-EVIDENCE/1",
+          "kind": "CUSTODIAN_ACCEPTANCE_KNOWN",
+          "custodian": "recipient",
+          "unit": "CU-PKG-PKG-7814ef55e0fa4ba0a788b3409e4a388b",
+          "recipient": "recipient",
+          "package": "PKG-7814ef55e0fa4ba0a788b3409e4a388b",
+          "package_digest": "sha256:bb852d151167b38ae52d4b8eb1469a05baaaf7086bc9f9a179ba35d859957db1",
+          "receipt": {
+            "acceptance": "AC-a1e54ec865f049fa9116000b6ca40091",
+            "accepted_at_ms": 1,
+            "attests": "RECIPIENT_PORTER_ACCEPTED_RESPONSIBILITY",
+            "kind": "RECEIPT",
+            "package": "PKG-7814ef55e0fa4ba0a788b3409e4a388b",
+            "package_digest": "sha256:bb852d151167b38ae52d4b8eb1469a05baaaf7086bc9f9a179ba35d859957db1",
+            "protocol": "PORTER/1",
+            "recipient": "recipient",
+            "state": "REMOTE_PORTER_DURABLY_ACCEPTED"
+          }
+        }
+      },
+      "rust_retained": {}
+    },
+    "reconstruction": "Return Package from LG; original CL remains",
+    "unknown": "Remote Return acceptance and processing"
+  },
+  {
+    "checkpoint": "after Return AC",
+    "canonical_facts": {
+      "python": {
+        "lodgements": [
+          {
+            "protocol": "PORTER/1",
+            "kind": "LODGEMENT",
+            "lodgement": "LG-53ea05b0198a4503b069739ef1f63adc",
+            "state": "LODGED",
+            "lodged_at_ms": 1790753496385,
+            "ticket": {
+              "protocol": "PORTER/1",
+              "ticket": "CT-bfacdd80ed9b4dd6a56a744c73b69251",
+              "package": "PKG-7814ef55e0fa4ba0a788b3409e4a388b",
+              "lodgement": "LG-53ea05b0198a4503b069739ef1f63adc",
+              "created": 1790753496,
+              "expires": 1790757096,
+              "abandoned": false,
+              "collected_return": null,
+              "events": [
+                {
+                  "event": "LODGED",
+                  "at_ms": 1790753496385,
+                  "details": {
+                    "lodgement": "LG-53ea05b0198a4503b069739ef1f63adc"
+                  }
+                }
+              ]
+            },
+            "package": {
+              "protocol": "PORTER/1",
+              "package": "PKG-7814ef55e0fa4ba0a788b3409e4a388b",
+              "from": "sender",
+              "to": "recipient",
+              "kind": "opaque.demo",
+              "created": 1790753496,
+              "expires": 1790757096,
+              "payload": {
+                "opaque": "é",
+                "number": 1.0
+              },
+              "future_field": {
+                "unchanged": [
+                  null,
+                  "𐀀"
+                ]
+              }
+            }
+          }
+        ],
+        "acceptances": [
+          {
+            "protocol": "PORTER/1",
+            "kind": "REMOTE_ACCEPTANCE",
+            "acceptance": "AC-74bd0ba606a5484fbab9701fbbcf1554",
+            "recipient": "sender",
+            "package": {
+              "created": 1790753496,
+              "expires": 1790757096,
+              "from": "recipient",
+              "future_field": {
+                "unchanged": [
+                  null,
+                  "𐀀"
+                ]
+              },
+              "in_reply_to": "PKG-7814ef55e0fa4ba0a788b3409e4a388b",
+              "kind": "opaque.demo",
+              "package": "PKG-d48a9d2222e33b282c06b1b344466a94",
+              "payload": {
+                "opaque": "return"
+              },
+              "protocol": "PORTER/1",
+              "to": "sender"
+            },
+            "package_digest": "sha256:102cfcb960238ec54d70542ad822a4d5b673e8a9f29fabddc06b028c1f7769fa",
+            "accepted_at_ms": 1790753497039
+          }
+        ],
+        "collections": []
+      },
+      "rust": {
+        "lodgements": [
+          {
+            "attests": "PACKAGE_RECOVERABLY_LODGED_WITH_ORIGIN_PORTER",
+            "kind": "LODGEMENT",
+            "lodged_at_ms": 1,
+            "lodgement": "LG-f7777cf8554b4e559cfd19356a8067d8",
+            "package": {
+              "created": 1790753496,
+              "expires": 1790757096,
+              "from": "recipient",
+              "future_field": {
+                "unchanged": [
+                  null,
+                  "𐀀"
+                ]
+              },
+              "in_reply_to": "PKG-7814ef55e0fa4ba0a788b3409e4a388b",
+              "kind": "opaque.demo",
+              "package": "PKG-d48a9d2222e33b282c06b1b344466a94",
+              "payload": {
+                "opaque": "return"
+              },
+              "protocol": "PORTER/1",
+              "to": "sender"
+            },
+            "package_digest": "sha256:102cfcb960238ec54d70542ad822a4d5b673e8a9f29fabddc06b028c1f7769fa",
+            "protocol": "PORTER/1"
+          }
+        ],
+        "acceptances": [
+          {
+            "acceptance": "AC-a1e54ec865f049fa9116000b6ca40091",
+            "accepted_at_ms": 1,
+            "attests": "RECIPIENT_PORTER_ACCEPTED_DURABLE_RESPONSIBILITY",
+            "kind": "REMOTE_ACCEPTANCE",
+            "package": {
+              "created": 1790753496,
+              "expires": 1790757096,
+              "from": "sender",
+              "future_field": {
+                "unchanged": [
+                  null,
+                  "𐀀"
+                ]
+              },
+              "kind": "opaque.demo",
+              "package": "PKG-7814ef55e0fa4ba0a788b3409e4a388b",
+              "payload": {
+                "number": 1,
+                "opaque": "é"
+              },
+              "protocol": "PORTER/1",
+              "to": "recipient"
+            },
+            "package_digest": "sha256:bb852d151167b38ae52d4b8eb1469a05baaaf7086bc9f9a179ba35d859957db1",
+            "protocol": "PORTER/1",
+            "recipient": "recipient"
+          }
+        ],
+        "collections": [
+          {
+            "acceptance": "AC-a1e54ec865f049fa9116000b6ca40091",
+            "attests": "PACKAGE_RECOVERABLY_TRANSFERRED_TO_HOST_CUSTODY",
+            "collected_at_ms": 2,
+            "collection": "CL-4d5614027afb4c8c9c93df5f384c58ed",
+            "collector": "local-host",
+            "kind": "COLLECTION",
+            "package": {
+              "created": 1790753496,
+              "expires": 1790757096,
+              "from": "sender",
+              "future_field": {
+                "unchanged": [
+                  null,
+                  "𐀀"
+                ]
+              },
+              "kind": "opaque.demo",
+              "package": "PKG-7814ef55e0fa4ba0a788b3409e4a388b",
+              "payload": {
+                "number": 1,
+                "opaque": "é"
+              },
+              "protocol": "PORTER/1",
+              "to": "recipient"
+            },
+            "protocol": "PORTER/1"
+          }
+        ]
+      }
+    },
+    "recoverable_responsibility": "Python recipient Porter for Return",
+    "participant_knowledge": {
+      "statement": "Python knows Return AC; Rust has no returned AC evidence",
+      "python_retained": {
+        "carriage/PKG-7814ef55e0fa4ba0a788b3409e4a388b.json": {
+          "protocol": "PORTER/1",
+          "kind": "CARRIAGE_KNOWLEDGE",
+          "package": "PKG-7814ef55e0fa4ba0a788b3409e4a388b",
+          "knowledge": "REMOTE_ACCEPTANCE_KNOWN",
+          "attempts": [
+            {
+              "attempt": 1,
+              "began_at_ms": 1790753496451
+            },
+            {
+              "attempt": 2,
+              "began_at_ms": 1790753496525
+            }
+          ],
+          "acceptance_evidence": {
+            "acceptance": "AC-a1e54ec865f049fa9116000b6ca40091",
+            "accepted_at_ms": 1,
+            "attests": "RECIPIENT_PORTER_ACCEPTED_RESPONSIBILITY",
+            "kind": "RECEIPT",
+            "package": "PKG-7814ef55e0fa4ba0a788b3409e4a388b",
+            "package_digest": "sha256:bb852d151167b38ae52d4b8eb1469a05baaaf7086bc9f9a179ba35d859957db1",
+            "protocol": "PORTER/1",
+            "recipient": "recipient",
+            "state": "REMOTE_PORTER_DURABLY_ACCEPTED"
+          },
+          "learned_at_ms": 1790753496602
+        },
+        "receipts/PKG-7814ef55e0fa4ba0a788b3409e4a388b.json": {
+          "acceptance": "AC-a1e54ec865f049fa9116000b6ca40091",
+          "accepted_at_ms": 1,
+          "attests": "RECIPIENT_PORTER_ACCEPTED_RESPONSIBILITY",
+          "kind": "RECEIPT",
+          "package": "PKG-7814ef55e0fa4ba0a788b3409e4a388b",
+          "package_digest": "sha256:bb852d151167b38ae52d4b8eb1469a05baaaf7086bc9f9a179ba35d859957db1",
+          "protocol": "PORTER/1",
+          "recipient": "recipient",
+          "state": "REMOTE_PORTER_DURABLY_ACCEPTED"
+        },
+        "native/evidence/acceptances/PKG-7814ef55e0fa4ba0a788b3409e4a388b--recipient.json": {
+          "protocol": "PORTER-CUSTODIAN-EVIDENCE/1",
+          "kind": "CUSTODIAN_ACCEPTANCE_KNOWN",
+          "custodian": "recipient",
+          "unit": "CU-PKG-PKG-7814ef55e0fa4ba0a788b3409e4a388b",
+          "recipient": "recipient",
+          "package": "PKG-7814ef55e0fa4ba0a788b3409e4a388b",
+          "package_digest": "sha256:bb852d151167b38ae52d4b8eb1469a05baaaf7086bc9f9a179ba35d859957db1",
+          "receipt": {
+            "acceptance": "AC-a1e54ec865f049fa9116000b6ca40091",
+            "accepted_at_ms": 1,
+            "attests": "RECIPIENT_PORTER_ACCEPTED_RESPONSIBILITY",
+            "kind": "RECEIPT",
+            "package": "PKG-7814ef55e0fa4ba0a788b3409e4a388b",
+            "package_digest": "sha256:bb852d151167b38ae52d4b8eb1469a05baaaf7086bc9f9a179ba35d859957db1",
+            "protocol": "PORTER/1",
+            "recipient": "recipient",
+            "state": "REMOTE_PORTER_DURABLY_ACCEPTED"
+          }
+        }
+      },
+      "rust_retained": {}
+    },
+    "reconstruction": "AC reconstructs inbox and receipt on restart",
+    "unknown": "Python Host action and Rust evidence retention"
+  }
+]

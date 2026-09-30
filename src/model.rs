@@ -13,8 +13,8 @@ pub struct Package {
     pub created: i64,
     pub expires: i64,
     pub payload: Value,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub in_reply_to: Option<String>,
+    #[serde(flatten)]
+    pub extensions: std::collections::BTreeMap<String, Value>,
 }
 
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
@@ -50,4 +50,33 @@ pub struct Collection {
     pub collector: String,
     pub collected_at_ms: i64,
     pub attests: String,
+}
+
+/// Protected AC evidence; local Acceptance storage is a separate representation.
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
+pub struct AcceptanceReceipt {
+    pub protocol: String,
+    pub kind: String,
+    pub package: String,
+    pub state: String,
+    pub recipient: String,
+    pub acceptance: String,
+    pub accepted_at_ms: i64,
+    pub package_digest: String,
+    pub attests: String,
+}
+impl From<&Acceptance> for AcceptanceReceipt {
+    fn from(ac: &Acceptance) -> Self {
+        Self {
+            protocol: "PORTER/1".into(),
+            kind: "RECEIPT".into(),
+            package: ac.package.package.clone(),
+            state: "REMOTE_PORTER_DURABLY_ACCEPTED".into(),
+            recipient: ac.recipient.clone(),
+            acceptance: ac.acceptance.clone(),
+            accepted_at_ms: ac.accepted_at_ms,
+            package_digest: ac.package_digest.clone(),
+            attests: "RECIPIENT_PORTER_ACCEPTED_RESPONSIBILITY".into(),
+        }
+    }
 }

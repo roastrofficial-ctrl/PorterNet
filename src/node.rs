@@ -156,9 +156,18 @@ impl PorterNode {
     }
 
     pub fn receive(&self, frame: &[u8], at_ms: i64) -> Result<Dispatch> {
+        self.receive_interrupted(frame, at_ms, CrashPoint::None)
+    }
+
+    pub fn receive_interrupted(
+        &self,
+        frame: &[u8],
+        at_ms: i64,
+        crash: CrashPoint,
+    ) -> Result<Dispatch> {
         let opened = NativeFrame::open(frame, &self.identity, &self.peers)?;
         match opened.class {
-            UnitClass::Package => self.receive_package(opened, at_ms),
+            UnitClass::Package => self.receive_package(opened, at_ms, crash),
             UnitClass::Ceremony => self.receive_ceremony(opened, at_ms),
             UnitClass::AcceptanceEvidence | UnitClass::RefusalEvidence => {
                 self.receive_package_evidence(opened, at_ms)
@@ -167,7 +176,12 @@ impl PorterNode {
         }
     }
 
-    fn receive_package(&self, opened: OpenedUnit, at_ms: i64) -> Result<Dispatch> {
+    fn receive_package(
+        &self,
+        opened: OpenedUnit,
+        at_ms: i64,
+        crash: CrashPoint,
+    ) -> Result<Dispatch> {
         let original_package = opened
             .value
             .get("package")
@@ -187,19 +201,13 @@ impl PorterNode {
             .get(&opened.sender)
             .ok_or(Error::CeremonyRefused)?;
         let standing = StandingStore::new(&self.root)?;
-        match standing.admit(
-            first,
-            &carried.package,
-            &carried.admission,
-            at_ms,
-            CrashPoint::None,
-        )? {
+        match standing.admit(first, &carried.package, &carried.admission, at_ms, crash)? {
             Admission::Accepted(acceptance) => {
                 self.queue_evidence(
                     &opened.sender,
                     UnitClass::AcceptanceEvidence,
                     format!("CU-EV-{}", carried.package.package),
-                    serde_json::to_value(&*acceptance)?,
+                    serde_json::to_value(crate::model::AcceptanceReceipt::from(&*acceptance))?,
                     acceptance.accepted_at_ms,
                 )?;
                 Ok(Dispatch::PackageAccepted)
@@ -248,14 +256,8 @@ impl PorterNode {
         let package = opened
             .value
             .get("package")
-            .and_then(|value| {
-                value.as_str().map(str::to_owned).or_else(|| {
-                    value
-                        .get("package")
-                        .and_then(Value::as_str)
-                        .map(str::to_owned)
-                })
-            })
+            .and_then(Value::as_str)
+            .map(str::to_owned)
             .ok_or(Error::NativeFrameRefused)?;
         self.retain_expected(EvidenceExpectation::Package(package), &opened, at_ms)
     }
@@ -349,7 +351,7 @@ mod tests {
             created: 1,
             expires: 10_000,
             payload: json!({"meaning":"belongs elsewhere"}),
-            in_reply_to: None,
+            extensions: Default::default(),
         }
     }
 

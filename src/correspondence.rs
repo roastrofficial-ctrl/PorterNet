@@ -199,7 +199,7 @@ mod tests {
             created: 1,
             expires: 2,
             payload: json!({"meaning":"belongs elsewhere"}),
-            in_reply_to: None,
+            extensions: Default::default(),
         }
     }
 

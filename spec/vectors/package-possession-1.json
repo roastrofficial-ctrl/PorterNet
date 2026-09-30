@@ -151,6 +151,36 @@
         }
       },
       "expected": false
+    },
+    {
+      "name": "changed-digest-byte",
+      "change": {
+        "admission": {
+          "vocabulary": "PORTER-INTRODUCTION/1",
+          "package_digest": "sha256:581ef853c3812e0d6ae100a72d72ed018bb1fea69e2a5ab5ae5948e904f80570",
+          "proof": "hmac-sha256:35e8d846a1bd263b8fc55b3a7a8661d06298c8fea1f08316760015ad10bb0032"
+        }
+      },
+      "expected": false
+    },
+    {
+      "name": "proof-field-base64",
+      "change": {
+        "admission": {
+          "vocabulary": "PORTER-INTRODUCTION/1",
+          "package_digest": "sha256:581ef853c3812e0d6ae100a72d72ed018bb1fea69e2a5ab5ae5948e904f8057a",
+          "proof": "NejYRqG9JjuPxVs6eoZh0GKYyP6h8IMWdgAVrRC7ADI="
+        }
+      },
+      "expected": false
     }
-  ]
+  ],
+  "package_source_utf8": "{\"protocol\":\"PORTER/1\",\"package\":\"PKG-00000000000000000000000000000001\",\"from\":\"sender\",\"to\":\"recipient\",\"kind\":\"opaque.demo\",\"created\":1,\"expires\":4102444800,\"payload\":{\"opaque\":\"lab\"}}",
+  "standing": {
+    "introduction": "IN-possession-vector-1",
+    "sender": "sender",
+    "recipient": "recipient",
+    "capability_hex": "666978747572652d736563726574",
+    "status": "current locally provisioned standing; terms permit this Package"
+  }
 }

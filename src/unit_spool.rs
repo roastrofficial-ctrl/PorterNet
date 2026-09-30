@@ -5,7 +5,9 @@ use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
 use crate::canonical;
-use crate::model::{Acceptance, Package};
+#[cfg(test)]
+use crate::model::Acceptance;
+use crate::model::{AcceptanceReceipt, Package};
 use crate::native::{OpenedUnit, UnitClass};
 use crate::publication::atomic_json;
 use crate::{CeremonyResult, Error, Result};
@@ -270,15 +272,19 @@ fn validate_evidence(outgoing: &NativeUnit, opened: &OpenedUnit, identity: &str)
     }
     let matches = match (&outgoing.awaits, opened.class) {
         (Some(EvidenceExpectation::Package(expected)), UnitClass::AcceptanceEvidence) => {
-            serde_json::from_value::<Acceptance>(opened.value.clone())
+            serde_json::from_value::<AcceptanceReceipt>(opened.value.clone())
                 .ok()
                 .zip(outgoing_package(outgoing))
                 .is_some_and(|(acceptance, package)| {
                     acceptance.protocol == "PORTER/1"
-                        && acceptance.kind == "REMOTE_ACCEPTANCE"
+                        && acceptance.kind == "RECEIPT"
+                        && acceptance.state == "REMOTE_PORTER_DURABLY_ACCEPTED"
+                        && acceptance.attests == "RECIPIENT_PORTER_ACCEPTED_RESPONSIBILITY"
+                        && acceptance.acceptance.starts_with("AC-")
+                        && acceptance.acceptance.len() > 3
+                        && acceptance.accepted_at_ms >= 0
                         && acceptance.recipient == outgoing.recipient
-                        && acceptance.package.package == *expected
-                        && acceptance.package == package
+                        && acceptance.package == *expected
                         && canonical::digest(&package)
                             .is_ok_and(|digest| acceptance.package_digest == digest)
                 })
@@ -355,7 +361,7 @@ mod tests {
             created: 1,
             expires: 100,
             payload: json!({"opaque":true}),
-            in_reply_to: None,
+            extensions: Default::default(),
         }
     }
 
@@ -406,7 +412,7 @@ mod tests {
             class: UnitClass::AcceptanceEvidence,
             sender: "recipient".into(),
             recipient: "origin".into(),
-            value: serde_json::to_value(acceptance()).unwrap(),
+            value: serde_json::to_value(AcceptanceReceipt::from(&acceptance())).unwrap(),
         };
         spool
             .retain_evidence("CU-package-one", &opened, 20, false)
@@ -425,7 +431,7 @@ mod tests {
             class: UnitClass::AcceptanceEvidence,
             sender: "recipient".into(),
             recipient: "origin".into(),
-            value: serde_json::to_value(acceptance()).unwrap(),
+            value: serde_json::to_value(AcceptanceReceipt::from(&acceptance())).unwrap(),
         };
         assert!(matches!(
             spool.retain_evidence("CU-package-one", &opened, 20, true),
@@ -448,7 +454,7 @@ mod tests {
                 class: UnitClass::AcceptanceEvidence,
                 sender: "stranger".into(),
                 recipient: "origin".into(),
-                value: serde_json::to_value(acceptance()).unwrap(),
+                value: serde_json::to_value(AcceptanceReceipt::from(&acceptance())).unwrap(),
             },
             OpenedUnit {
                 unit: "CU-wrong-class".into(),

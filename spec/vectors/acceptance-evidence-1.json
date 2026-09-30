@@ -1,0 +1,105 @@
+{
+  "binding": "CORRESPONDENCE-WIRE-1",
+  "package": {
+    "protocol": "PORTER/1",
+    "package": "PKG-00000000000000000000000000000001",
+    "from": "sender",
+    "to": "recipient",
+    "kind": "opaque.demo",
+    "created": 1,
+    "expires": 4102444800,
+    "payload": {
+      "opaque": "lab"
+    }
+  },
+  "receipt": {
+    "protocol": "PORTER/1",
+    "kind": "RECEIPT",
+    "package": "PKG-00000000000000000000000000000001",
+    "state": "REMOTE_PORTER_DURABLY_ACCEPTED",
+    "recipient": "recipient",
+    "acceptance": "AC-00000000000000000000000000000001",
+    "accepted_at_ms": 1,
+    "package_digest": "sha256:581ef853c3812e0d6ae100a72d72ed018bb1fea69e2a5ab5ae5948e904f8057a",
+    "attests": "RECIPIENT_PORTER_ACCEPTED_RESPONSIBILITY"
+  },
+  "negative": [
+    {
+      "change": {
+        "protocol": "PORTER/2"
+      },
+      "expected": false
+    },
+    {
+      "change": {
+        "kind": "REMOTE_ACCEPTANCE"
+      },
+      "expected": false
+    },
+    {
+      "change": {
+        "package": {
+          "protocol": "PORTER/1",
+          "package": "PKG-00000000000000000000000000000001",
+          "from": "sender",
+          "to": "recipient",
+          "kind": "opaque.demo",
+          "created": 1,
+          "expires": 4102444800,
+          "payload": {
+            "opaque": "lab"
+          }
+        }
+      },
+      "expected": false
+    },
+    {
+      "change": {
+        "state": "COLLECTED"
+      },
+      "expected": false
+    },
+    {
+      "change": {
+        "recipient": "stranger"
+      },
+      "expected": false
+    },
+    {
+      "change": {
+        "acceptance": "AC-"
+      },
+      "expected": false
+    },
+    {
+      "change": {
+        "accepted_at_ms": -1
+      },
+      "expected": false
+    },
+    {
+      "change": {
+        "accepted_at_ms": true
+      },
+      "expected": false
+    },
+    {
+      "change": {
+        "accepted_at_ms": "1"
+      },
+      "expected": false
+    },
+    {
+      "change": {
+        "package_digest": "581ef853c3812e0d6ae100a72d72ed018bb1fea69e2a5ab5ae5948e904f8057a"
+      },
+      "expected": false
+    },
+    {
+      "change": {
+        "attests": "APPLICATION_PROCESSED"
+      },
+      "expected": false
+    }
+  ]
+}

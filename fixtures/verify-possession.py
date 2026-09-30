@@ -11,7 +11,9 @@ from porter.introduction import canonical, proof, verify_proof
 def verify_vectors(path):
     with open(path) as stream:
         vector = json.load(stream)
-    package = vector['package']
+    from porter.canonical import loads
+    package = loads(vector['package_source_utf8'])
+    assert package == vector['package']
     key = bytes.fromhex(vector['capability_hex'])
     encoded = canonical(package)
     assert encoded == vector['canonical_package_utf8'].encode('utf-8')

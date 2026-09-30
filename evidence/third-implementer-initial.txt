@@ -1,0 +1,38 @@
+Python canonical: 28 positive + 17 negative vectors; bytes/digests/proofs/idempotence PASS
+Rust canonical: 28 positive + 17 negative vectors; bytes/digests/proofs/idempotence PASS
+Python possession: 1 positive + 13 negative vectors PASS
+Rust possession: 1 positive + 13 negative vectors PASS
+Python constructs -> Python and Rust verify stored normative proof PASS
+Rust constructs -> Python and Rust verify stored normative proof PASS
+Python ↔ Rust protected frame codec: PASS
+Rust node: 11 negative possession cases refused before AC
+Python LG -> protected carriage -> Rust possession -> durable AC: PASS
+Before independent attention: CL absent; adapter not started
+Independent attention -> durable CL; stop before adapter offer: PASS
+Adapter death after CL preserves exact custody fact: PASS
+Recovered CL -> frozen adapter opportunity; duplicate opportunity tolerated: PASS
+Lifecycle: LG -> AC -> later independent attention -> CL -> adapter opportunity PASS
+Canonical journeys: 28 Python LG -> Rust AC/replay -> independent CL/adapter PASS
+Reverse protected frames: 28 Python possession/AC/replay digests agree PASS
+Authenticated hostile JSON: 18 rejected by both native decoders; Rust AC/CL absent PASS
+Complete Package: extension preserved through production AC PASS
+{"silence_leg": "outbound", "elapsed_seconds": 0.31756375008262694, "samples": 6, "CL": false, "adapter_started": false}
+{"silence_leg": "return", "elapsed_seconds": 0.32359904202166945, "samples": 6, "CL": false, "adapter_started": false}
+Traceback (most recent call last):
+  File "/interop.py", line 191, in <module>
+    runpy.run_path("/roundtrip.py")
+  File "<frozen runpy>", line 287, in run_path
+  File "<frozen runpy>", line 98, in _run_module_code
+  File "<frozen runpy>", line 88, in _run_code
+  File "/roundtrip.py", line 104, in <module>
+    journey(False)
+  File "/roundtrip.py", line 93, in journey
+    back_receipt=py(origin,'frame','ACCEPTANCE_EVIDENCE')
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/roundtrip.py", line 17, in py
+    def py(root,op,*a,fail=False):return call(['python','/roundtrip-worker.py',op,str(root),*map(str,a)],fail)
+                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/roundtrip.py", line 13, in call
+    assert (p.returncode!=0) if fail else (p.returncode==0), (command[0:2],p.stdout,p.stderr)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: (['python', '/roundtrip-worker.py'], '', 'Traceback (most recent call last):\n  File "/roundtrip-worker.py", line 21, in <module>\n    porter = Porter(\'sender\',root,{},relationships={\'recipient\':{\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File "/usr/local/lib/python3.12/site-packages/porter/daemon.py", line 99, in __init__\n    self.admission = Admission(\n                     ^^^^^^^^^^\n  File "/usr/local/lib/python3.12/site-packages/porter/introduction.py", line 148, in __init__\n    establish(self.root, recipient, sender, config["secret"], config, config.get("authority", "LOCAL_POLICY"))\n  File "/usr/local/lib/python3.12/site-packages/porter/introduction.py", line 98, in establish\n    raise ValueError("Introduction identity already names different standing")\nValueError: Introduction identity already names different standing\n')

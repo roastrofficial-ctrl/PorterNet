@@ -1,6 +1,6 @@
 {
   "binding": "PORTER-CANONICAL-JSON/1",
-  "authority": "RFC 8785 sections 3.1\u20133.2; PORTER-CANONICAL-JSON/1",
+  "authority": "RFC 8785 sections 3.1–3.2; PORTER-CANONICAL-JSON/1",
   "capability_hex": "666978747572652d736563726574",
   "positive": [
     {
@@ -290,11 +290,11 @@
     },
     {
       "name": "utf16-key-order",
-      "input_utf8": "{\"\ue000\":1,\"\ud800\udc00\":2,\"a\":3}",
-      "canonical_utf8": "{\"a\":3,\"\ud800\udc00\":2,\"\ue000\":1}",
+      "input_utf8": "{\"\":1,\"𐀀\":2,\"a\":3}",
+      "canonical_utf8": "{\"a\":3,\"𐀀\":2,\"\":1}",
       "canonical_hex": "7b2261223a332c22f0908080223a322c22ee8080223a317d",
       "sha256_hex": "e7286ce065b2cc74ec502be56a09b4210f1533604cb4929d1ca01559ef1b8b76",
-      "package_input_utf8": "{\"created\":1,\"expires\":4102444800,\"from\":\"sender\",\"kind\":\"opaque.demo\",\"package\":\"PKG-00000000000000000000000000000001\",\"payload\":{\"case\":{\"\ue000\":1,\"\ud800\udc00\":2,\"a\":3}},\"protocol\":\"PORTER/1\",\"to\":\"recipient\"}",
+      "package_input_utf8": "{\"created\":1,\"expires\":4102444800,\"from\":\"sender\",\"kind\":\"opaque.demo\",\"package\":\"PKG-00000000000000000000000000000001\",\"payload\":{\"case\":{\"\":1,\"𐀀\":2,\"a\":3}},\"protocol\":\"PORTER/1\",\"to\":\"recipient\"}",
       "package_canonical_hex": "7b2263726561746564223a312c2265787069726573223a343130323434343830302c2266726f6d223a2273656e646572222c226b696e64223a226f70617175652e64656d6f222c227061636b616765223a22504b472d3030303030303030303030303030303030303030303030303030303030303031222c227061796c6f6164223a7b2263617365223a7b2261223a332c22f0908080223a322c22ee8080223a317d7d2c2270726f746f636f6c223a22504f525445522f31222c22746f223a22726563697069656e74227d",
       "package_digest": "sha256:ed68905965f5ae560adf3c12ba903514d73d816e0e0057d3c2fa8bb02f107295",
       "admission": {
@@ -305,11 +305,11 @@
     },
     {
       "name": "unicode-literal",
-      "input_utf8": "\"caf\u00e9 \ud83e\udd8b\"",
-      "canonical_utf8": "\"caf\u00e9 \ud83e\udd8b\"",
+      "input_utf8": "\"café 🦋\"",
+      "canonical_utf8": "\"café 🦋\"",
       "canonical_hex": "22636166c3a920f09fa68b22",
       "sha256_hex": "9bff24b5e15a4cf60f1cd494fda8ea0db8a4d1e4a29745e8f5c18155a2a3bccb",
-      "package_input_utf8": "{\"created\":1,\"expires\":4102444800,\"from\":\"sender\",\"kind\":\"opaque.demo\",\"package\":\"PKG-00000000000000000000000000000001\",\"payload\":{\"case\":\"caf\u00e9 \ud83e\udd8b\"},\"protocol\":\"PORTER/1\",\"to\":\"recipient\"}",
+      "package_input_utf8": "{\"created\":1,\"expires\":4102444800,\"from\":\"sender\",\"kind\":\"opaque.demo\",\"package\":\"PKG-00000000000000000000000000000001\",\"payload\":{\"case\":\"café 🦋\"},\"protocol\":\"PORTER/1\",\"to\":\"recipient\"}",
       "package_canonical_hex": "7b2263726561746564223a312c2265787069726573223a343130323434343830302c2266726f6d223a2273656e646572222c226b696e64223a226f70617175652e64656d6f222c227061636b616765223a22504b472d3030303030303030303030303030303030303030303030303030303030303031222c227061796c6f6164223a7b2263617365223a22636166c3a920f09fa68b227d2c2270726f746f636f6c223a22504f525445522f31222c22746f223a22726563697069656e74227d",
       "package_digest": "sha256:c54d43b7091c744cd2f5adcc85f1cea64d976867d3af77959c0b90a3e2e9be50",
       "admission": {
@@ -321,7 +321,7 @@
     {
       "name": "unicode-escaped",
       "input_utf8": "\"caf\\u00e9 \\ud83e\\udd8b\"",
-      "canonical_utf8": "\"caf\u00e9 \ud83e\udd8b\"",
+      "canonical_utf8": "\"café 🦋\"",
       "canonical_hex": "22636166c3a920f09fa68b22",
       "sha256_hex": "9bff24b5e15a4cf60f1cd494fda8ea0db8a4d1e4a29745e8f5c18155a2a3bccb",
       "package_input_utf8": "{\"created\":1,\"expires\":4102444800,\"from\":\"sender\",\"kind\":\"opaque.demo\",\"package\":\"PKG-00000000000000000000000000000001\",\"payload\":{\"case\":\"caf\\u00e9 \\ud83e\\udd8b\"},\"protocol\":\"PORTER/1\",\"to\":\"recipient\"}",
@@ -335,11 +335,11 @@
     },
     {
       "name": "composed",
-      "input_utf8": "\"\u00e9\"",
-      "canonical_utf8": "\"\u00e9\"",
+      "input_utf8": "\"é\"",
+      "canonical_utf8": "\"é\"",
       "canonical_hex": "22c3a922",
       "sha256_hex": "f2886017e9c7abacf804b54d64787dce2b611c9544ba21f3affdd126a6e50086",
-      "package_input_utf8": "{\"created\":1,\"expires\":4102444800,\"from\":\"sender\",\"kind\":\"opaque.demo\",\"package\":\"PKG-00000000000000000000000000000001\",\"payload\":{\"case\":\"\u00e9\"},\"protocol\":\"PORTER/1\",\"to\":\"recipient\"}",
+      "package_input_utf8": "{\"created\":1,\"expires\":4102444800,\"from\":\"sender\",\"kind\":\"opaque.demo\",\"package\":\"PKG-00000000000000000000000000000001\",\"payload\":{\"case\":\"é\"},\"protocol\":\"PORTER/1\",\"to\":\"recipient\"}",
       "package_canonical_hex": "7b2263726561746564223a312c2265787069726573223a343130323434343830302c2266726f6d223a2273656e646572222c226b696e64223a226f70617175652e64656d6f222c227061636b616765223a22504b472d3030303030303030303030303030303030303030303030303030303030303031222c227061796c6f6164223a7b2263617365223a22c3a9227d2c2270726f746f636f6c223a22504f525445522f31222c22746f223a22726563697069656e74227d",
       "package_digest": "sha256:8031682a425fabac529e0599a398c929cdf8c7f29b069f3cdd07517dd5a3b520",
       "admission": {
@@ -351,7 +351,7 @@
     {
       "name": "decomposed",
       "input_utf8": "\"e\\u0301\"",
-      "canonical_utf8": "\"e\u0301\"",
+      "canonical_utf8": "\"é\"",
       "canonical_hex": "2265cc8122",
       "sha256_hex": "3d68ce21f2899a475713cdbe7562ba9bdb6b1dfde8af1f221bdff4a0935b53b2",
       "package_input_utf8": "{\"created\":1,\"expires\":4102444800,\"from\":\"sender\",\"kind\":\"opaque.demo\",\"package\":\"PKG-00000000000000000000000000000001\",\"payload\":{\"case\":\"e\\u0301\"},\"protocol\":\"PORTER/1\",\"to\":\"recipient\"}",
@@ -381,7 +381,7 @@
     {
       "name": "line-separators",
       "input_utf8": "\"\\u2028\\u2029\"",
-      "canonical_utf8": "\"\u2028\u2029\"",
+      "canonical_utf8": "\"  \"",
       "canonical_hex": "22e280a8e280a922",
       "sha256_hex": "e3a0e2262ac7790f4df36b522a8fbdd4ee3370d568eb15dc25c5f1775f14ed6c",
       "package_input_utf8": "{\"created\":1,\"expires\":4102444800,\"from\":\"sender\",\"kind\":\"opaque.demo\",\"package\":\"PKG-00000000000000000000000000000001\",\"payload\":{\"case\":\"\\u2028\\u2029\"},\"protocol\":\"PORTER/1\",\"to\":\"recipient\"}",
@@ -406,6 +406,21 @@
         "vocabulary": "PORTER-INTRODUCTION/1",
         "package_digest": "sha256:acd0827923d5090b95b44856bac24f0d8b98dab5ed42c915a2a87c2e6b4376d8",
         "proof": "hmac-sha256:c75d94b6f282620d64efd643270ee15514c60d08064d483c41298ff4cfcff7cb"
+      }
+    },
+    {
+      "name": "unknown-package-fields",
+      "input_utf8": " { \"z\": [3, {\"b\":2,\"a\":1}], \"a\":null } ",
+      "canonical_utf8": "{\"a\":null,\"z\":[3,{\"a\":1,\"b\":2}]}",
+      "canonical_hex": "7b2261223a6e756c6c2c227a223a5b332c7b2261223a312c2262223a327d5d7d",
+      "sha256_hex": "ee81ccd655e95649b136539d3109005e5bb06184db38010914b076ebbccc8c38",
+      "package_input_utf8": "{\"created\":1,\"expires\":4102444800,\"from\":\"sender\",\"kind\":\"opaque.demo\",\"package\":\"PKG-00000000000000000000000000000001\",\"payload\":{\"case\":{\"z\":[3,{\"b\":2,\"a\":1}],\"a\":null}},\"protocol\":\"PORTER/1\",\"to\":\"recipient\",\"reply_to\":\"sender\",\"in_reply_to\":null,\"future_field\":{\"z\":\"é\",\"a\":[true,null,\"𐀀\"]}}",
+      "package_canonical_hex": "7b2263726561746564223a312c2265787069726573223a343130323434343830302c2266726f6d223a2273656e646572222c226675747572655f6669656c64223a7b2261223a5b747275652c6e756c6c2c22f0908080225d2c227a223a22c3a9227d2c22696e5f7265706c795f746f223a6e756c6c2c226b696e64223a226f70617175652e64656d6f222c227061636b616765223a22504b472d3030303030303030303030303030303030303030303030303030303030303031222c227061796c6f6164223a7b2263617365223a7b2261223a6e756c6c2c227a223a5b332c7b2261223a312c2262223a327d5d7d7d2c2270726f746f636f6c223a22504f525445522f31222c227265706c795f746f223a2273656e646572222c22746f223a22726563697069656e74227d",
+      "package_digest": "sha256:8269113bf15e04b55ef1c0155ac97a9498c3801e9e7753cc48816f358a7ad4bc",
+      "admission": {
+        "vocabulary": "PORTER-INTRODUCTION/1",
+        "package_digest": "sha256:8269113bf15e04b55ef1c0155ac97a9498c3801e9e7753cc48816f358a7ad4bc",
+        "proof": "hmac-sha256:e5aa6c55a4cfa9419956cf2666a193e44039cde171ea9d053018a1c00a8fa175"
       }
     }
   ],

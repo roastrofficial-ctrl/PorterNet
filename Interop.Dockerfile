@@ -16,7 +16,11 @@ COPY --from=rust-build /src/target/release/canonical_fixture /usr/local/bin/cano
 COPY spec /spec
 COPY fixtures/verify-canonical.py /verify-canonical.py
 COPY fixtures/canonical-interop.py /canonical-interop.py
+COPY fixtures/verify-receipt.py /verify-receipt.py
 COPY fixtures/verify-possession.py /verify-possession.py
 COPY fixtures/opaque-adapter.py /opaque-adapter.py
+COPY fixtures/roundtrip.py /roundtrip.py
+COPY fixtures/roundtrip-worker.py /roundtrip-worker.py
+COPY fixtures/return-adapter.py /return-adapter.py
 COPY fixtures/python-native-interop.py /interop.py
 ENTRYPOINT ["python", "/interop.py"]

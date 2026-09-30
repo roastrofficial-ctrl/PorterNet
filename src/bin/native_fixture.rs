@@ -11,11 +11,39 @@ use serde_json::{Value, json};
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let arguments: Vec<String> = env::args().skip(1).collect();
     match arguments.first().map(String::as_str) {
+        Some("proof") if arguments.len() == 3 => {
+            let p: porternet::Package = serde_json::from_value(porternet::canonical::parse(arguments[1].as_bytes())?)?;
+            println!("{}", porternet::possession::proof(&unhex(&arguments[2])?, &p)?); Ok(())
+        },
+        Some("verify-proof") if arguments.len() == 4 => {
+            let p: porternet::Package = serde_json::from_value(porternet::canonical::parse(arguments[1].as_bytes())?)?;
+            println!("{}", porternet::possession::verify(&unhex(&arguments[2])?, &p, &serde_json::from_str(&arguments[3])?)?); Ok(())
+        },
+        Some("lodge") if arguments.len() >= 3 => {
+            let p = serde_json::from_value(porternet::canonical::parse(arguments[2].as_bytes())?)?;
+            let crash = if arguments.len() == 4 { porternet::CrashPoint::AfterLodgement } else { porternet::CrashPoint::None };
+            let lg = porternet::PorterStore::new(&arguments[1])?.lodge(&p, 1, crash)?;
+            println!("{}", serde_json::to_string(&lg)?); Ok(())
+        },
+        Some("outgoing") if arguments.len() == 7 => {
+            let identity = PorterIdentity::from_private_bytes(&arguments[2], key(&arguments[3])?)?;
+            let node = PorterNode::new(&arguments[1], identity, HashMap::from([(arguments[4].clone(), key(&arguments[5])?)]), HashMap::new())?;
+            let class: UnitClass = serde_json::from_value(json!(arguments[6]))?;
+            let unit = node.spool().pending()?.into_iter().find(|u| u.class == class).ok_or("no pending Unit")?;
+            println!("{}", BASE64.encode(node.frame(&unit)?)); Ok(())
+        },
+        Some("queue") if arguments.len() == 8 => {
+            let identity = PorterIdentity::from_private_bytes(&arguments[2], key(&arguments[3])?)?;
+            let node = PorterNode::new(&arguments[1], identity, HashMap::from([(arguments[4].clone(), key(&arguments[5])?)]), HashMap::new())?;
+            let p = serde_json::from_value(porternet::canonical::parse(arguments[6].as_bytes())?)?;
+            node.queue_package(&p, &porternet::possession::proof(&unhex(&arguments[7])?, &p)?, 1)?; Ok(())
+        },
         Some("establish") if arguments.len() == 4 => establish(&arguments),
         Some("vectors") if arguments.len() == 2 => vectors(&arguments[1]),
+        Some("receipt-vectors") if arguments.len() == 3 => receipt_vectors(&arguments[1], &arguments[2]),
         Some("seal") if arguments.len() == 8 => seal(&arguments),
         Some("open") if arguments.len() == 6 => open(&arguments),
-        Some("receive") if arguments.len() == 7 => receive(&arguments),
+        Some("receive") if arguments.len() == 7 || arguments.len() == 8 => receive(&arguments),
         _ => Err("native-fixture vectors FILE | establish ROOT INTRODUCTION_JSON KEY_HEX | seal FROM PRIVATE TO PUBLIC CLASS UNIT JSON | open TO PRIVATE FROM PUBLIC FRAME | receive TO PRIVATE FROM PUBLIC FRAME ROOT".into()),
     }
 }
@@ -27,7 +55,12 @@ fn receive(arguments: &[String]) -> Result<(), Box<dyn std::error::Error>> {
     let peers = HashMap::from([(arguments[3].clone(), key(&arguments[4])?)]);
     let roots = HashMap::from([(arguments[3].clone(), "IN-fixture".into())]);
     let node = PorterNode::new(&arguments[6], recipient, peers, roots)?;
-    let dispatch = node.receive(&BASE64.decode(&arguments[5])?, 1)?;
+    let crash = if arguments.len() == 8 {
+        porternet::CrashPoint::AfterAcceptance
+    } else {
+        porternet::CrashPoint::None
+    };
+    let dispatch = node.receive_interrupted(&BASE64.decode(&arguments[5])?, 1, crash)?;
     println!("{dispatch:?}");
     Ok(())
 }
@@ -77,7 +110,14 @@ fn unhex(value: &str) -> Result<Vec<u8>, Box<dyn std::error::Error>> {
 fn vectors(path: &str) -> Result<(), Box<dyn std::error::Error>> {
     use porternet::{Package, canonical, possession};
     let vector: Value = serde_json::from_slice(&std::fs::read(path)?)?;
-    let package: Package = serde_json::from_value(vector["package"].clone())?;
+    let source = canonical::parse(
+        vector["package_source_utf8"]
+            .as_str()
+            .ok_or("source")?
+            .as_bytes(),
+    )?;
+    assert_eq!(source, vector["package"]);
+    let package: Package = serde_json::from_value(source)?;
     let capability = unhex(vector["capability_hex"].as_str().ok_or("key")?)?;
     let encoded = canonical::bytes(&package)?;
     assert_eq!(
@@ -136,6 +176,57 @@ fn establish(arguments: &[String]) -> Result<(), Box<dyn std::error::Error>> {
     let introduction: porternet::Introduction = serde_json::from_str(&arguments[2])?;
     porternet::StandingStore::new(&arguments[1])?
         .establish(&introduction, &unhex(&arguments[3])?)?;
+    Ok(())
+}
+
+fn receipt_vectors(path: &str, root: &str) -> Result<(), Box<dyn std::error::Error>> {
+    use porternet::{EvidenceExpectation, NativeUnit, OpenedUnit, UnitSpool};
+    let vector: Value = serde_json::from_slice(&std::fs::read(path)?)?;
+    let mut cases = vec![(vector["receipt"].clone(), true)];
+    let mut extended = vector["receipt"].clone();
+    extended["future"] = json!(true);
+    cases.push((extended, true));
+    for item in vector["negative"].as_array().unwrap() {
+        let mut receipt = vector["receipt"].clone();
+        for (key, value) in item["change"].as_object().unwrap() {
+            receipt[key] = value.clone();
+        }
+        cases.push((receipt, false));
+    }
+    for (i, (receipt, expected)) in cases.iter().enumerate() {
+        let spool = UnitSpool::new(std::path::Path::new(root).join(i.to_string()), "sender")?;
+        spool.queue(&NativeUnit {
+            protocol: "PORTER-CARRIAGE/1".into(),
+            unit: "CU-vector".into(),
+            class: UnitClass::Package,
+            sender: "sender".into(),
+            recipient: "recipient".into(),
+            value: json!({"package":vector["package"], "admission":null}),
+            awaits: Some(EvidenceExpectation::Package(
+                vector["package"]["package"].as_str().unwrap().into(),
+            )),
+            created_at_ms: 1,
+        })?;
+        let opened = OpenedUnit {
+            unit: "CU-evidence".into(),
+            class: UnitClass::AcceptanceEvidence,
+            sender: "recipient".into(),
+            recipient: "sender".into(),
+            value: receipt.clone(),
+        };
+        assert_eq!(
+            spool
+                .retain_evidence("CU-vector", &opened, 2, false)
+                .is_ok(),
+            *expected,
+            "receipt case {i}"
+        );
+        assert_eq!(spool.evidence("CU-vector")?.is_some(), *expected);
+    }
+    println!(
+        "Rust receipt: 2 positive + {} negative vectors PASS",
+        cases.len() - 2
+    );
     Ok(())
 }
 

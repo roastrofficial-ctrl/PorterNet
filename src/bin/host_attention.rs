@@ -44,7 +44,12 @@ fn main() -> Result<()> {
     {
         return Err("invalid canonical acceptance".into());
     }
-    let cl = store.collect(id, "local-host", 2, CrashPoint::None)?;
+    let crash = if args[2] == "--crash-after-cl" {
+        CrashPoint::AfterCollection
+    } else {
+        CrashPoint::None
+    };
+    let cl = store.collect(id, "local-host", 2, crash)?;
     if cl.package != ac.package || cl.acceptance != ac.acceptance || cl.kind != "COLLECTION" {
         return Err("Collection disagrees with acceptance".into());
     }

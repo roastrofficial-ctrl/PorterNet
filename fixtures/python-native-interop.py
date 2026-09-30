@@ -25,6 +25,18 @@ vector_path = '/spec/vectors/package-possession-1.json'
 runpy.run_path('/verify-possession.py')['verify_vectors'](vector_path)
 print(run('vectors', vector_path), flush=True)
 vector = json.loads(Path(vector_path).read_text())
+# Producers do not supply expected answers: both must match the stored answer.
+secret = bytes.fromhex(vector['capability_hex']).decode()
+produced_python = proof(secret, vector['package'])
+produced_rust = json.loads(run('proof', vector['package_source_utf8'], vector['capability_hex']))
+for producer, admission in [('Python', produced_python), ('Rust', produced_rust)]:
+    assert admission == vector['admission']
+    assert verify_proof(secret, vector['package'], admission)
+    assert run('verify-proof', vector['package_source_utf8'], vector['capability_hex'], json.dumps(admission)) == 'true'
+    print(producer + ' constructs -> Python and Rust verify stored normative proof PASS', flush=True)
+
+
+runpy.run_path('/verify-receipt.py')
 
 sender_private = base64.b64encode(bytes([7]) * 32).decode()
 recipient_private = base64.b64encode(bytes([11]) * 32).decode()
@@ -123,7 +135,7 @@ with tempfile.TemporaryDirectory() as directory:
         assert receive(destination, base64.b64encode(bad_frame).decode()) == 'PackageRefused'
         assert not list((destination / 'acceptances').glob('*.json'))
         assert not list((destination / 'collections').glob('*.json'))
-    print('Rust node: 11 negative possession cases refused before AC', flush=True)
+    print(f"Rust node: {len(vector['negative'])} negative possession cases refused before AC", flush=True)
 
     destination = root / 'rust'
     app = root / 'application'
@@ -177,3 +189,5 @@ with tempfile.TemporaryDirectory() as directory:
 
 # Both normative gates passed above; extend the proven journey's value domain.
 runpy.run_path('/canonical-interop.py')
+
+runpy.run_path("/roundtrip.py")

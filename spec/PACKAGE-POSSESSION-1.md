@@ -19,8 +19,8 @@ without whitespace, and its only numbers are decimal integers. The complete
 Package, including its identity, participates. No envelope field is removed.
 The vector's C is authoritative; regenerating expected outputs at test time is
 not conformance evidence. The subsequent [CANONICAL-JSON-1 amendment](CANONICAL-JSON-1.md) binds the
-numeric and Unicode rules beyond this original vector. This vector remains
-unchanged and must still pass.
+numeric and Unicode rules beyond this original vector. Its original positive bytes remain
+unchanged and must still pass; later metadata and negative cases extend it.
 
 ## Required bytes and representation
 
@@ -82,3 +82,22 @@ property named in `change`. Cases include changed Package identity and payload,
 key bytes, digest text, vocabulary, a proof octet, uppercase proof encoding,
 raw-digest and prefixed-digest HMAC inputs, and string admission representations.
 The prefixed-input case explicitly fixes the observed D-006 counterexample.
+
+## Standing selection (Third Implementer amendment, 2026-09-30)
+
+The recipient retains an Introduction identity and capability K for the
+Package's sender/recipient relationship. The current standing, local terms and
+succession history select K before new admission. A peer-supplied Introduction
+identity cannot choose a different capability. `introduction` is deliberately
+NOT a member of admission and is NOT concatenated into the HMAC message.
+The Package already binds sender and recipient. The fixed vector's local
+Introduction is `IN-possession-vector-1`; it is a provisioning label, not a
+portable key derivation rule. The `standing` section records the local fixture
+precondition; it is not transmitted. Exact historical AC replay keeps its
+existing precedence over current standing/proof checks. Unknown, expired or
+insufficient standing may refuse before AC even when this MAC is valid.
+
+The vector now includes literal source JSON as well as C. Construction and
+verification MUST both consume this binding. The four producer/verifier
+combinations are checked without translation. Neither a digest-only verifier
+nor a successful native decryption constitutes admission.

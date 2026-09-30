@@ -339,7 +339,7 @@ mod tests {
             created: 1,
             expires: 10_000,
             payload: json!({"opaque": true}),
-            in_reply_to: None,
+            extensions: Default::default(),
         }
     }
     fn introduction(identity: &str, count: u64) -> Introduction {

@@ -11,10 +11,13 @@ where Generation Zero obtains evidence without promoting reference choices.
 | Introduction/admission | `INTRODUCTIONS.md`, `SECURITY-CHECK.md` normative assertions | introduction and renewal tests |
 | Succession | `STANDING-SUCCESSION.md` | renewal tests |
 | Ceremony | `CEREMONIES.md` | ceremony tests |
-| Native carriage | `NATIVE-CARRIAGE.md` | native hostile-frame tests |
+| Native carriage and AC evidence | `NATIVE-CARRIAGE.md`, `spec/CORRESPONDENCE-WIRE-1.md` | protected round trip, stored receipt vectors and hostile-frame tests |
 | Rendezvous | `RENDEZVOUS-CONTINUITY.md` | rendezvous tests |
 | Host boundary | frozen Runtime and Adapter contracts | host-runtime conformance vectors |
 
 Python source is consulted after these documents only to extract a missing byte
 binding or construct cross-implementation fixtures. Every such consultation
 creates or updates a divergence-register entry.
+
+The current source-consultation questions and remaining gaps are recorded in
+[the Third Implementer ledger](PORTERNET-THIRD-IMPLEMENTER-LEDGER.md).
